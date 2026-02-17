@@ -1,0 +1,4725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+    <link rel="icon" type="image/png" href="img/favicon.png">
+    <title>ATITHI</title>
+    <script src="libs/jsQR.js"></script>
+    <script src="libs/qrcode.min.js"></script>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <!-- LOGIN PAGE -->
+    <div id="loginPage" class="page active">
+        <div class="login-container">
+            <div class="login-box">
+                <div class="login-logo">
+                    <img src="img/logo.png" class="auth-logo" alt="ATITHI Logo">
+                </div>                
+
+                <form id="loginForm" onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <input type="email" id="loginEmail" class="form-input" placeholder="your@company.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Password</label>
+                        <input type="password" id="loginPassword" class="form-input" placeholder="Enter password" required>
+                    </div>
+
+                    <button
+                      type="submit"
+                      id="loginBtn"
+                      class="btn btn-primary login-btn"
+                    >
+                      <span class="btn-text">Sign In</span>
+                    </button>
+
+                    <p class="login-subtitle" style="margin-top: 12px; text-align: center;">
+                      New company?
+                      <button
+                        type="button"
+                        style="border:none;background:none;color:#344767;font-size:14px;cursor:pointer;text-decoration:underline;padding:0;margin:0;"
+                        onclick="openCompanySignup()">
+                        Create your account
+                      </button>
+                    </p>
+
+                    <p style="text-align:center;margin-top:10px;">
+                      <button
+                        type="button"
+                        style="border:none;background:none;color:#344767;font-size:14px;cursor:pointer;text-decoration:underline;"
+                        onclick="switchPage('forgotPasswordPage')">
+                        Forgot password?
+                      </button>
+                    </p>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Company Signup Modal -->
+    <div id="companySignupModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title">Create your account</h3>
+          <button class="modal-close" onclick="closeCompanySignup()">&times;</button>
+        </div>
+
+        <div class="modal-body">
+          <form id="companySignupForm" onsubmit="submitCompanySignup(event)">
+            
+            <!-- 1. Email (mandatory) -->
+            <div class="form-group">
+              <label class="form-label">Email<span style="color:#EA0606;"> *</span></label>
+              <input type="email" id="signupEmail" class="form-input" required placeholder="you@example.com">
+            </div>
+
+            <!-- 2 & 3. First + Last name (both mandatory) -->
+            <div class="grid-cols-2">
+              <div class="form-group">
+                <label class="form-label">First Name<span style="color:#EA0606;"> *</span></label>
+                <input type="text" id="signupFirstName" class="form-input" required placeholder="First name">
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Last Name<span style="color:#EA0606;"> *</span></label>
+                <input type="text" id="signupLastName" class="form-input" required placeholder="Last name">
+              </div>
+            </div>
+
+            <!-- 4. Mobile number (optional) -->
+            <div class="form-group">
+              <label class="form-label">Mobile Number</label>
+              <input type="tel" id="signupPhone" class="form-input" placeholder="10-digit mobile number">
+            </div>
+
+            <!-- 5. Company name (optional) -->
+            <div class="form-group">
+              <label class="form-label">Company Name</label>
+              <input type="text" id="signupCompanyName" class="form-input" placeholder="Company / Organisation (optional)">
+            </div>
+
+            <!-- 6. Password (mandatory, with rule) -->
+            <div class="form-group">
+              <label class="form-label">Password<span style="color:#EA0606;"> *</span></label>
+              <input 
+                type="password" 
+                id="signupPassword" 
+                class="form-input" 
+                required 
+                minlength="8"
+                placeholder="Create a strong password"
+              >
+              <small style="font-size:12px;color:var(--gray-600);display:block;margin-top:4px;">
+                Password must be at least 8 characters and contain at least one capital letter, one lower case letter, and one number.
+              </small>
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" onclick="closeCompanySignup()">Cancel</button>
+              <button type="submit" class="btn btn-primary">Create Account</button>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- FORGOT PASSWORD PAGE -->
+    <div id="forgotPasswordPage" class="page">
+      <div class="login-container">
+        <div class="login-box">
+          <h2 class="login-title">Forgot your password?</h2>
+          <p class="login-subtitle">
+            Enter your work email and we’ll send you a password reset link.
+          </p>
+
+          <form id="forgotPasswordForm" onsubmit="handleForgotPassword(event)">
+            <div class="form-group">
+              <label class="form-label">Work email</label>
+              <input
+                type="email"
+                id="forgotEmail"
+                class="form-input"
+                placeholder="you@company.com"
+                required
+              >
+            </div>
+
+            <button
+              type="submit"
+              id="forgotPasswordBtn"
+              class="btn btn-primary btn-full"
+            >
+              Send reset link
+            </button>
+
+            <p style="text-align:center;margin-top:10px;">
+              <button
+                type="button"
+                style="border:none;background:none;color:#344767;font-size:14px;cursor:pointer;text-decoration:underline;"
+                onclick="switchPage('loginPage')">
+                ← Back to login
+              </button>
+            </p>
+
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- SET PASSWORD PAGE -->
+    <div id="setPasswordPage" class="page" role="region" aria-labelledby="setPasswordTitle">
+      <div class="login-container">
+        <div class="login-box">
+          <h2 id="setPasswordTitle" class="login-title">Set your password</h2>
+          <p class="login-subtitle">Choose a new password to activate your account.</p>
+
+          <form id="setPasswordForm" onsubmit="handleSetPassword(event)" autocomplete="off" novalidate>
+            <!-- Email (read-only, just for info) -->
+            <div class="form-group">
+              <label for="setPasswordEmail">Email</label>
+              <input type="email" id="setPasswordEmail" name="setPasswordEmail" readonly autocomplete="username">
+            </div>
+
+            <!-- New password -->
+            <div class="form-group">
+              <label for="newPassword">New password</label>
+              <input
+                type="password"
+                id="newPassword"
+                name="newPassword"
+                required
+                minlength="8"
+                pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}"
+                title="Minimum 8 characters, 1 uppercase, 1 lowercase, 1 number"
+                autocomplete="new-password"
+                aria-describedby="passwordHint"
+              />
+              <p id="passwordHint" class="input-hint">
+                Password must be at least 8 characters and contain at least one capital letter, one lower case letter, and one number.
+              </p>
+            </div>
+
+            <!-- Confirm password -->
+            <div class="form-group">
+              <label for="confirmPassword">Confirm password</label>
+              <input
+                type="password"
+                id="confirmPassword"
+                name="confirmPassword"
+                required
+                minlength="8"
+                autocomplete="new-password"
+              />
+            </div>
+
+            <!-- Submit -->
+            <button
+              type="submit"
+              id="setPasswordBtn"
+              class="btn btn-primary btn-full"
+              aria-live="polite"
+            >
+              Save password &amp; Sign in
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- PASSWORD SETUP LINK EXPIRED PAGE -->
+    <div id="expiredPage" class="page">
+      <div class="login-container">
+        <div class="login-box">
+          <h2 style="margin-bottom: 8px;">Link expired</h2>
+          <p style="font-size: 14px; color: #6b7280; line-height: 1.5;">
+            This password setup link has already been used or has expired.<br />
+            Please contact your administrator to request a new password setup link.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- KIOSK HOME PAGE -->
+    <div id="kioskHomePage" class="page kiosk-page">
+
+      <div class="kiosk-shell">
+
+        <!-- Logo -->
+        <div class="kiosk-brand">
+          <img src="img/logo.png" alt="ATITHI" class="kiosk-logo" id="kioskExitTrigger">
+        </div>
+
+        <!-- Welcome -->
+        <h1 class="kiosk-title">Welcomes you</h1>
+
+        <p class="kiosk-instruction">
+          Scan QR
+        </p>
+
+        <!-- QR -->
+        <div class="kiosk-qr-wrapper">
+          <div id="kioskQrCode"></div>
+        </div>
+
+        <!-- Helper text -->
+        <p class="kiosk-helper">
+          or<br>
+          Open <strong>touchless.atithi.app</strong> on your mobile browser to check-in<br>
+          using your mobile phone
+        </p>
+
+        <!-- Divider -->
+        <div class="kiosk-divider">or</div>
+
+        <!-- Primary Action -->
+        <button class="kiosk-btn kiosk-btn-primary" onclick="kioskOpenCheckIn()">
+          Check-in
+        </button>
+
+        <!-- Secondary Action -->
+        <button class="kiosk-btn kiosk-btn-outline" onclick="kioskOpenScan()">
+          Have an Invite ?
+        </button>
+
+      </div>
+
+    </div>
+
+    <!-- DASHBOARD PAGE -->
+    <div id="dashboardPage" class="page">
+        <div class="app-container">
+            <!-- SIDEBAR -->
+            <aside class="sidebar" id="sidebar">
+
+                <!-- LOGO -->
+                <div class="sidebar-logo">
+                    <img src="img/banner.png" alt="ATITHI Logo">
+                </div>
+
+                <!-- SCROLLABLE NAV AREA -->
+                <div class="sidebar-scroll">
+
+                    <!-- MENU -->
+                    <div class="nav-section">
+                        <div class="nav-section-title">Menu</div>
+
+                        <div class="nav-item active" onclick="navigateTo('dashboard', this)">
+                            <i data-lucide="layout-dashboard"></i>
+                            Dashboard
+                        </div>
+
+                        <div class="nav-item" id="navAnalytics" onclick="navigateTo('analytics', this)">
+                            <i data-lucide="bar-chart-3"></i>
+                            Analytics
+                        </div>
+
+                        <div class="nav-item" id="navVisitors" style="display:none;" onclick="navigateTo('visitors', this)">
+                            <i data-lucide="users"></i>
+                            Visitors
+                        </div>
+
+                        <div class="nav-item" id="navCheckIn" style="display:none;" onclick="navigateTo('checkIn', this)">
+                            <i data-lucide="scan-line"></i>
+                            Scan
+                        </div>
+
+                        <div class="nav-item" id="navDirectory" style="display:none;" onclick="navigateTo('directory', this)">
+                            <i data-lucide="book-user"></i>
+                            Directory
+                        </div>
+                    </div>
+
+                    <!-- ADMIN -->
+                    <div class="nav-section" id="adminSection" style="display:none;">
+                        <div class="nav-section-title">Admin</div>
+
+                        <div class="nav-item" onclick="navigateTo('employees')">
+                            <i data-lucide="user-cog"></i>
+                            Employees
+                        </div>
+
+                        <div class="nav-item" onclick="navigateTo('security')">
+                            <i data-lucide="shield-check"></i>
+                            Security
+                        </div>
+
+                        <!-- SETTINGS DROPDOWN -->
+                        <div class="nav-item" onclick="toggleSettingsMenu()">
+                          <i data-lucide="settings"></i>
+                          Settings
+                          <span id="settingsArrow" style="margin-left:auto;">▶</span>
+                        </div>
+
+                        <div id="settingsSubmenu" style="display:none; margin-left:24px;">
+
+                          <div class="nav-item" onclick="navigateTo('settings'); openVisitorTypes()">
+                            <i data-lucide="user-plus"></i>
+                            Visitor Types
+                          </div>
+
+                          <!-- future items -->
+                          <!--
+                          <div class="nav-item">Branding</div>
+                          <div class="nav-item">Notifications</div>
+                          -->
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- FIXED LOGOUT -->
+                <div class="sidebar-footer">
+                    <div class="nav-section-title">Account</div>
+                    <div class="nav-item logout-item" onclick="logout()">
+                        <i data-lucide="log-out"></i>
+                        Logout
+                    </div>
+                </div>
+
+            </aside>
+
+            <!-- MAIN CONTENT -->
+            <div class="main-content">
+                <!-- TOP NAV -->
+                <div class="top-nav">
+                    <div class="top-nav-left">
+                        <button class="menu-toggle" id="menuToggle" onclick="toggleMobileSidebar()">☰</button>
+                        <div class="search-box">
+                            <i data-lucide="search"></i>
+                            <input type="text" placeholder="Search visitors..." id="searchInput" onkeyup="filterVisitors()">
+                        </div>
+                    </div>
+
+                    <div class="top-nav-right">
+                        <div class="user-profile" onclick="toggleUserMenu()">
+                            <div class="user-avatar" id="userAvatar">A</div>
+                            <div class="user-info">
+                                <div class="user-name" id="userName">User</div>
+                                <div class="user-role" id="userRole">Role</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CONTENT AREA -->
+                <div class="content">
+                    <div id="alertContainer"></div>
+
+                    <!-- Dashboard Section -->
+                    <div id="dashboardSection" class="section active">
+
+                        <!-- STATS GRID (ONLY STAT CARDS) -->
+                        <div class="stats-grid">
+                            <!-- All-time Visitors -->
+                            <div class="stat-card">
+                                <div class="stat-label">All-Time Visitors</div>
+                                <div class="stat-value" id="totalVisitors">0</div>
+                                <div class="stat-meta">All-Time Registrations</div>
+                            </div>
+
+                            <!-- Today's Visitors -->
+                            <div class="stat-card">
+                                <div class="stat-label">Total Visitors</div>
+                                <div class="stat-value" id="todayVisitors">0</div>
+                                <div class="stat-meta">Today's Visitors</div>
+                            </div>
+
+                            <!-- Currently Inside -->
+                            <div class="stat-card">
+                                <div class="stat-label">Active Visitors</div>
+                                <div class="stat-value" id="currentlyInside">0</div>
+                                <div class="stat-meta">Currently Inside</div>
+                            </div>
+
+                            <!-- Today's Check-Out -->
+                            <div class="stat-card">
+                                <div class="stat-label">Checked-Out</div>
+                                <div class="stat-value" id="todayCheckout">0</div>
+                                <div class="stat-meta">Today's Check-Out</div>
+                            </div>
+                        </div>
+
+                        <!-- RECENT VISITORS -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h2 class="card-title">Recent Visitors</h2>
+                                <button class="btn btn-primary btn-sm" onclick="showInviteModal()">+ Invite Visitor</button>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-container">
+                                    <table class="modern-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Email</th>
+                                                <th>Date</th>
+                                                <th>Status</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="recentVisitorsTable">
+                                            <tr>
+                                                <td colspan="5" style="text-align:center;padding:40px;color:var(--gray-700);">
+                                                    No visitors yet
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Analytics Section -->
+                    <div id="analyticsSection" class="section" style="display:none;">
+
+                      <!-- OVERVIEW -->
+                      <div class="stats-grid">
+                        <div class="stat-card">
+                          <div class="stat-label">Total Visitors</div>
+                          <div class="stat-value" id="analyticsTotalVisitors">0</div>
+                          <div class="stat-meta">All Time</div>
+                        </div>
+
+                        <div class="stat-card">
+                          <div class="stat-label">Total Invites</div>
+                          <div class="stat-value" id="analyticsTotalInvites">0</div>
+                          <div class="stat-meta">Invitation Sent</div>
+                        </div>
+
+                        <div class="stat-card">
+                          <div class="stat-label">Active Visitors</div>
+                          <div class="stat-value" id="analyticsCheckedIn">0</div>
+                          <div class="stat-meta">Currently Inside</div>
+                        </div>
+                      </div>
+
+                      <!-- VISITORS CHART -->
+                      <div class="card">
+                        <div class="card-header">
+                          <h2 class="card-title">Visitors Trend</h2>
+                        </div>
+                        <div class="card-body">
+                          <canvas id="analyticsVisitorsChart" height="120"></canvas>
+                        </div>
+                      </div>
+
+                      <!-- SPLIT ANALYTICS -->
+                      <div class="stats-grid">
+
+                        <!-- TOP HOSTS -->
+                        <div class="card">
+                          <div class="card-header">
+                            <h2 class="card-title">Top Hosts</h2>
+                          </div>
+                          <div class="card-body">
+                            <canvas id="analyticsTopHostsChart"></canvas>
+                          </div>
+                        </div>
+
+                        <!-- VISITOR TYPES -->
+                        <div class="card">
+                          <div class="card-header">
+                            <h2 class="card-title">Visitor Types</h2>
+                          </div>
+                          <div class="card-body">
+                            <canvas id="analyticsVisitorTypesChart"></canvas>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+
+                    <!-- Visitors Section -->
+                    <div id="visitorsSection" class="section" style="display: none;">
+                        <div class="card">
+                            <div class="card-header">
+                                <h2 class="card-title">All Visitors</h2>
+                                <div style="display: flex; gap: 8px;">
+                                    <button class="btn btn-primary btn-sm" onclick="showInviteModal()">+ New Invite</button>
+                                    <button class="btn btn-secondary btn-sm" onclick="showBulkInviteModal()">
+                                      <i data-lucide="upload"></i>
+                                      Bulk Import
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-container">
+                                    <table class="modern-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Email</th>
+                                                <th>Date</th>
+                                                <th>Check-In</th>
+                                                <th>Status</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="allVisitorsTable">
+                                            <tr>
+                                                <td colspan="6" style="text-align: center; padding: 40px; color: var(--gray-700);">No visitors yet</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Check In Section -->
+                    <div id="checkInSection" class="section" style="display: none;">
+                        <div class="card">
+                            <div class="card-header">
+                                <h2 class="card-title">Scan</h2>
+                            </div>
+                            <div class="card-body">
+                                <div id="cameraMode" style="display: none;">
+                                    <div class="scanner-container">
+                                        <video id="cameraStream" autoplay class="camera-stream"></video>
+                                        <canvas id="scanCanvas" style="display: none;"></canvas>
+                                        <div class="camera-overlay"></div>
+                                    </div>
+                                    <div id="scanStatus" class="scan-status">Scanning...</div>
+                                    <div style="text-align: center; margin-top: 16px;">
+                                        <button
+                                          type="button"
+                                          class="btn btn-secondary btn-sm"
+                                          onclick="handleCheckinCancel()">
+                                          Cancel
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div id="manualMode" style="text-align: center;">
+                                    <p style="margin-bottom: 16px; color: var(--gray-700);">
+                                        Scan visitor QR code to automatically check in or check out.
+                                    </p>
+
+                                    <button class="btn btn-primary" onclick="startAutoScan()">
+                                        Start Scan
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Directory Section -->
+                    <div id="directorySection" class="section" style="display: none;">
+                        <div class="card">
+                            <div class="card-header">
+                                <h2 class="card-title">Company Directory</h2>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-container">
+                                    <table class="modern-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Email</th>
+                                                <th>Role</th>
+                                                <th>Department</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="directoryTable">
+                                            <tr>
+                                                <td colspan="4" style="text-align: center; padding: 40px; color: var(--gray-700);">No employees found</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Employees Section -->
+                    <div id="employeesSection" class="section" style="display: none;">
+                        <div class="card">
+                            <div class="card-header">
+                                <h2 class="card-title">Employee Management</h2>
+                                <button class="btn btn-primary btn-sm" onclick="showAddEmployeeModal()">+ Add Employee</button>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-container">
+                                    <table class="modern-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Email</th>
+                                                <th>Role</th>
+                                                <th>Status</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="employeesTable">
+                                            <tr>
+                                                <td colspan="5" style="text-align: center; padding: 40px; color: var(--gray-700);">No employees</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Security Section -->
+                    <div id="securitySection" class="section" style="display: none;">
+                        <div class="card">
+                            <div class="card-header">
+                                <h2 class="card-title">Security Settings</h2>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <h3 style="margin-bottom: 16px; color: var(--gray-900); font-weight: 600;">Block List</h3>
+                                    <div style="display: flex; gap: 8px; margin-bottom: 16px;">
+                                        <input type="email" id="blockEmail" class="form-input" placeholder="Email to block" style="flex: 1;">
+                                        <button class="btn btn-danger" onclick="addToBlockList()">Block</button>
+                                    </div>
+                                    <div id="blockListTable" style="font-size: 14px;">
+                                        <p style="color: var(--gray-700);">No blocked emails</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Settings Section -->
+                    <div id="settingsSection" class="section" style="display: none;">
+
+                      <div class="card">
+                        <div class="card-header">
+                          <h2 class="card-title">Visitor Types</h2>
+                        </div>
+
+                        <div class="card-body">
+
+                          <!-- Visitor Types Header -->
+                          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+                            <div>
+                              <h3 style="margin-bottom:4px;">Customize Your Visitor Types</h3>
+                              <p style="font-size:14px; color:var(--gray-600); max-width:520px;">
+                                Don’t know where to start? Visitor types help you control how different
+                                guests check in, what information is collected, and how notifications work.
+                              </p>
+                            </div>
+
+                            <button class="btn btn-primary btn-sm" onclick="openAddVisitorTypeModal()">
+                              + Add Visitor Type
+                            </button>
+                          </div>
+
+                          <!-- Two Column Layout -->
+                            <div style="display:grid; grid-template-columns: 1fr 420px; gap:32px; align-items:start;">
+
+                              <!-- LEFT -->
+                              <div style="min-height:260px; display:flex; align-items:center; justify-content:center;">
+                                <img
+                                  src="img/visitor-illustration.svg"
+                                  alt=""
+                                  style="max-width:260px; opacity:0.85;"
+                                >
+                              </div>
+
+                              <!-- RIGHT -->
+                              <div class="card" style="margin-bottom:0; box-shadow:none;">
+                                <div class="card-body" style="padding:0;" id="visitorTypesContainer"></div>
+                              </div>
+
+                            </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODALS -->
+    <!-- Invite Modal -->
+    <div id="inviteModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Invite Visitor</h2>
+                <button
+                  class="modal-close"
+                  type="button"
+                  onclick="handleCheckinCancel()">
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="inviteForm" onsubmit="submitInvite(event)">
+                    <div class="grid-cols-2">
+                        <div class="form-group">
+                            <label class="form-label">First Name</label>
+                            <input type="text" id="inviteFirstName" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Last Name</label>
+                            <input type="text" id="inviteLastName" class="form-input" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <input type="email" id="inviteEmail" class="form-input" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Purpose of Visit</label>
+                        <input type="text" id="invitePurpose" class="form-input" placeholder="e.g. Business Meeting" required>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="form-label">Host</label>
+                      <select id="inviteHost" class="form-select" required>
+                          <option value="">Select host</option>
+                      </select>
+                  </div>
+
+                    <div class="grid-cols-2">
+                        <div class="form-group">
+                            <label class="form-label">Phone</label>
+                            <input type="tel" id="invitePhone" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Guest</label>
+                            <select id="inviteGuests" class="form-select">
+                              <option value="0" selected>0</option>
+                              <option value="1">1</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid-cols-2">
+                        <div class="form-group">
+                            <label class="form-label">Date</label>
+                            <input type="date" id="inviteDate" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Time</label>
+                            <input type="time" id="inviteTime" class="form-input" required>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  onclick="handleCheckinCancel()">
+                  Cancel
+                </button>
+                <button class="btn btn-primary" onclick="submitInvite()">Send Invite</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bulk Import Modal -->
+    <div id="bulkInviteModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title">Bulk Import Visitors</h2>
+          <button class="modal-close" onclick="closeModal('bulkInviteModal')"></button>
+        </div>
+
+        <div class="modal-body">
+          <div class="info-box">
+              CSV Format: firstName, lastName, email, phone, guests, date, time<br>
+              Guests: 0 or 1 (0 = no extra guest, 1 = with one guest)<br>
+              Example: John, Doe, john@example.com, 91XXXXXXXXXX, 1, 2025-12-10, 14:00
+            </div>
+
+          <div class="button-group" style="margin-bottom: 16px;">
+            <button class="btn btn-secondary btn-sm" onclick="downloadSampleCSV()">📥 Download Sample</button>
+            <span style="color: var(--gray-600); font-size: 13px; align-self: center;">or</span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Upload CSV File</label>
+            <div class="file-input-wrapper">
+              <input
+                type="file"
+                id="csvFileInput"
+                accept=".csv"
+                onchange="handleFileUpload(event)"
+              >
+              <label
+                for="csvFileInput"
+                class="file-input-label"
+                id="fileLabel"
+                ondrop="handleDrop(event)"
+                ondragover="handleDragOver(event)"
+                ondragleave="handleDragLeave(event)"
+              >
+                📁 Drag &amp; drop CSV file here or click to select
+              </label>
+            </div>
+          </div>
+
+          <div class="modal-divider"></div>
+
+          <p style="color: var(--gray-700); margin-bottom: 12px; font-size: 13px; font-weight: 600;">
+            Or Paste Data Manually:
+          </p>
+
+          <textarea
+            id="bulkInviteData"
+            class="form-textarea"
+            placeholder="firstName,lastName,email,phone,guests,date,time&#10;John,Doe,john@example.com,91XXXXXXXXXX,1,2025-12-10,14:00&#10;Jane,Smith,jane@example.com,91XXXXXXXXXX,0,2025-12-11,15:00">
+          ></textarea>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn btn-secondary" onclick="closeModal('bulkInviteModal')">Cancel</button>
+          <button class="btn btn-primary" onclick="processBulkInvite()">Import Visitors</button>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Add Employee Modal -->
+    <div id="addEmployeeModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="addEmployeeTitle">
+      <div class="modal-content" role="document">
+        <div class="modal-header">
+          <h2 class="modal-title" id="addEmployeeTitle">Add Employee</h2>
+          <button class="modal-close" type="button" aria-label="Close" onclick="closeModal('addEmployeeModal')">&times;</button>
+        </div>
+
+        <div class="modal-body">
+          <form id="addEmployeeForm" onsubmit="addEmployee(event)">
+            <div class="form-group">
+              <label class="form-label" for="employeeName">Full Name</label>
+              <input type="text" id="employeeName" class="form-input" required autocomplete="name" />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="employeeEmail">Email</label>
+              <input type="email" id="employeeEmail" class="form-input" required autocomplete="email" inputmode="email" />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="employeeRole">Role</label>
+              <select id="employeeRole" class="form-select" required>
+                <option value="">Select role</option>
+                <option value="Receptionist">Receptionist</option>
+                <option value="Security Officer">Security Officer</option>
+                <option value="Kiosk">Kiosk (Public Check-In Screen)</option>
+                <option value="Employee">Employee</option>
+              </select>
+            </div>
+
+            <div class="modal-footer">
+              <button class="btn btn-secondary" type="button" onclick="closeModal('addEmployeeModal')">Cancel</button>
+              <button id="addEmployeeBtn" class="btn btn-primary" type="submit">Add Employee</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Visitor Details Modal -->
+    <div id="visitorActionModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Visitor Details</h2>
+                <button class="modal-close" onclick="closeModal('visitorActionModal')"></button>
+            </div>
+            <div class="modal-body" id="visitorDetailsContent"></div>
+            <div class="modal-footer" id="visitorActionFooter"></div>
+        </div>
+    </div>
+
+    <!-- QR Code Modal -->
+    <div id="visitorQRModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Visitor QR Code</h2>
+                <button class="modal-close" onclick="closeModal('visitorQRModal')"></button>
+            </div>
+            <div class="modal-body" style="text-align: center;">
+                <p style="color: var(--gray-700); margin-bottom: 16px; font-weight: 600;" id="visitorQRName"></p>
+                <div id="visitorQRCode" style="display: inline-block; padding: 16px; background: var(--white); border-radius: 8px;"></div>
+                <p style="color: var(--gray-700); margin-top: 16px; font-size: 12px;">Scan this code to check-in</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('visitorQRModal')">Close</button>
+                <button class="btn btn-primary" onclick="downloadVisitorQR()">Download QR</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Visitor Modal -->
+    <div id="editVisitorModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Edit Visitor</h2>
+                <button class="modal-close" onclick="closeModal('editVisitorModal')"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editVisitorForm" onsubmit="submitEditVisitor(event)">
+                    <div class="grid-cols-2">
+                        <div class="form-group">
+                            <label class="form-label">First Name</label>
+                            <input type="text" id="editFirstName" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Last Name</label>
+                            <input type="text" id="editLastName" class="form-input" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <input type="email" id="editEmail" class="form-input" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Phone</label>
+                        <input type="tel" id="editPhone" class="form-input">
+                    </div>
+
+                    <div class="grid-cols-2">
+                        <div class="form-group">
+                            <label class="form-label">Date</label>
+                            <input type="date" id="editDate" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Time</label>
+                            <input type="time" id="editTime" class="form-input" required>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('editVisitorModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="submitEditVisitor()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+    <script>
+    /* ===============================
+       ANALYTICS (FINAL • SILENT • SAFE)
+       =============================== */
+
+    let analyticsCharts = {
+        visitors: null,
+        hosts: null,
+        types: null
+    };
+
+    function updateAnalytics() {
+        const analyticsSection = document.getElementById('analyticsSection');
+
+        // 🚫 Not active → do nothing
+        if (!analyticsSection || !analyticsSection.classList.contains('active')) {
+            return;
+        }
+
+        // 🚫 Chart.js not loaded yet
+        if (typeof window.Chart !== 'function') {
+            return;
+        }
+
+        const visitors = Array.isArray(AppState.visitors)
+            ? AppState.visitors
+            : [];
+
+        // Safe counters
+        const totalVisitors = document.getElementById('analyticsTotalVisitors');
+        const totalInvites  = document.getElementById('analyticsTotalInvites');
+        const checkedIn     = document.getElementById('analyticsCheckedIn');
+
+        if (totalVisitors) totalVisitors.textContent = visitors.length;
+        if (totalInvites) {
+            totalInvites.textContent =
+                visitors.filter(v => v.source === 'dashboard').length;
+        }
+        if (checkedIn) {
+            checkedIn.textContent =
+                visitors.filter(v => v.checkedInAt && !v.checkedOutAt).length;
+        }
+
+        renderAnalyticsCharts(visitors);
+    }
+
+    function renderAnalyticsCharts(visitors) {
+
+        const visitorsCanvas = document.getElementById('analyticsVisitorsChart');
+        const hostsCanvas    = document.getElementById('analyticsTopHostsChart');
+        const typesCanvas    = document.getElementById('analyticsVisitorTypesChart');
+
+        // 🚫 Canvas not ready → exit silently
+        if (!visitorsCanvas || !hostsCanvas || !typesCanvas) return;
+
+        /* -----------------------------
+           VISITORS TREND
+        ------------------------------ */
+        const byDate = {};
+        visitors.forEach(v => {
+            const rawDate = v.invitedAt || v.createdAt || v.checkedInAt;
+            if (!rawDate) return;
+
+            const day = new Date(rawDate).toLocaleDateString('en-IN');
+            byDate[day] = (byDate[day] || 0) + 1;
+        });
+
+        if (analyticsCharts.visitors) {
+            analyticsCharts.visitors.destroy();
+        }
+
+        analyticsCharts.visitors = new Chart(visitorsCanvas, {
+            type: 'bar',
+            data: {
+                labels: Object.keys(byDate),
+                datasets: [{
+                    label: 'Visitors',
+                    data: Object.values(byDate)
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+
+        /* -----------------------------
+           TOP HOSTS
+        ------------------------------ */
+        const hosts = {};
+        visitors.forEach(v => {
+            if (!v.hostName) return;
+            hosts[v.hostName] = (hosts[v.hostName] || 0) + 1;
+        });
+
+        if (analyticsCharts.hosts) {
+            analyticsCharts.hosts.destroy();
+        }
+
+        analyticsCharts.hosts = new Chart(hostsCanvas, {
+            type: 'doughnut',
+            data: {
+                labels: Object.keys(hosts),
+                datasets: [{
+                    data: Object.values(hosts)
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+
+        /* -----------------------------
+           VISITOR TYPES
+        ------------------------------ */
+        const types = { Invited: 0, WalkIn: 0 };
+        visitors.forEach(v => {
+          if (v.source === 'dashboard') types.Invited++;
+          else types.WalkIn++;
+        });
+        if (analyticsCharts.types) {
+            analyticsCharts.types.destroy();
+        }
+
+        analyticsCharts.types = new Chart(typesCanvas, {
+            type: 'doughnut',
+            data: {
+                labels: Object.keys(types),
+                datasets: [{
+                    data: Object.values(types)
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+    }
+    </script>
+
+    <script>
+
+        /* =========================================
+           FIX: TABLET / PWA VIEWPORT HEIGHT
+           (Chrome + Home Screen Safe)
+        ========================================= */
+        function fixViewportHeight() {
+          const vh = window.innerHeight * 0.01;
+          document.documentElement.style.setProperty('--vh', `${vh}px`);
+        }
+
+        // Run immediately
+        fixViewportHeight();
+
+        // Recalculate on resize & rotation
+        window.addEventListener('resize', fixViewportHeight);
+        window.addEventListener('orientationchange', fixViewportHeight);
+
+        // DATABASE MANAGEMENT
+        let Database = {
+            /**
+             * Generate a mostly-unique ID for users / visitors / employees / blockList
+             * Example outputs:
+             *  - USR-MBE84N0S-7Q2
+             *  - VIS-MBE84N0T-3KD
+             */
+            generateId(type) {
+                const codes = {
+                    users: 'USR',
+                    visitors: 'VIS',
+                    employees: 'EMP',
+                    blockList: 'BLK'
+                };
+
+                const prefix = codes[type] || 'ID';
+
+                // current time in base36 (short, monotonic)
+                const timePart = Date.now().toString(36).toUpperCase();
+
+                // random 3-char base36 suffix to avoid clashes in same millisecond
+                const randomPart = Math.floor(Math.random() * 46656) // 36^3
+                    .toString(36)
+                    .toUpperCase()
+                    .padStart(3, '0');
+
+                return `${prefix}-${timePart}-${randomPart}`;
+            },
+
+            // kept for backward compatibility (no-op now)
+            saveCounters() {
+                // no longer needed — IDs are time-based
+            }
+        };
+
+
+        // STATE MANAGEMENT
+        /* --------------------------
+           MULTI–TENANT APP STATE
+        ---------------------------*/
+        let AppState = {
+            currentUser: JSON.parse(localStorage.getItem('currentUser')) || null,
+
+            users: JSON.parse(localStorage.getItem('users')) || {},
+            visitors: JSON.parse(localStorage.getItem('visitors')) || [],
+            visitorTypes: JSON.parse(localStorage.getItem('visitorTypes')) || [],
+            blockList: JSON.parse(localStorage.getItem('blockList')) || [],
+
+            settings: JSON.parse(localStorage.getItem('vmsSettings')) || {
+                welcomeTitle: 'Welcome',
+                welcomeMessage: ''
+            },
+
+            scanningActive: false,
+            scanMode: 'checkin',
+            lastScanAt: 0,
+
+            save() {
+                localStorage.setItem('currentUser', JSON.stringify(this.currentUser));
+                localStorage.setItem('users', JSON.stringify(this.users));
+                localStorage.setItem('visitors', JSON.stringify(this.visitors));
+                localStorage.setItem('visitorTypes', JSON.stringify(this.visitorTypes));
+                localStorage.setItem('blockList', JSON.stringify(this.blockList));
+                localStorage.setItem('vmsSettings', JSON.stringify(this.settings));
+            }
+        };
+
+        // expose globally
+        window.AppState = AppState;
+
+        /* ======================================
+           DEFAULT VISITOR TYPE (SYSTEM REQUIRED)
+           ====================================== */
+
+        (function ensureDefaultVisitorType() {
+
+            if (!Array.isArray(AppState.visitorTypes)) {
+                AppState.visitorTypes = [];
+            }
+
+            const alreadyExists = AppState.visitorTypes.some(v => v.isDefault === true);
+            if (alreadyExists) return;
+
+            const defaultVisitorType = {
+                id: 'VT-DEFAULT',
+                name: 'Visitors',
+                isDefault: true,      // 🔒 system type
+                visible: true,
+                deletable: false,
+                editable: true,
+
+                fields: [
+                    'firstName',
+                    'lastName',
+                    'email',
+                    'phone',
+                    'guests',
+                    'date',
+                    'time'
+                ],
+
+                createdAt: new Date().toISOString()
+            };
+
+            AppState.visitorTypes.unshift(defaultVisitorType);
+            AppState.save();
+
+        })();
+
+
+        /* ===============================
+           VISITOR TYPES – RENDER FUNCTION
+           =============================== */
+
+        function renderVisitorTypes() {
+          const container = document.getElementById('visitorTypesContainer');
+          if (!container) return;
+
+          container.innerHTML = AppState.visitorTypes.map(v => `
+            <div class="visitor-type-row">
+              <strong>${v.name}</strong>
+
+              <div class="visitor-type-actions">
+                <span class="visitor-type-label">Show</span>
+
+                <label class="switch">
+                  <input type="checkbox"
+                    ${v.visible ? 'checked' : ''}
+                    onchange="toggleVisitorType('${v.id}')">
+                  <span class="slider"></span>
+                </label>
+
+                <button class="icon-btn" title="Edit"
+                  onclick="editVisitorType('${v.id}')">
+                  <i data-lucide="pencil"></i>
+                </button>
+              </div>
+            </div>
+          `).join('');
+
+          lucide.createIcons();
+        }
+
+        function toggleVisitorType(id) {
+          const vt = AppState.visitorTypes.find(v => v.id === id);
+          if (!vt) return;
+
+          vt.visible = !vt.visible;
+          AppState.save();
+          renderVisitorTypes(); // 🔁 re-render UI
+        }
+
+        function editVisitorType(id) {
+          const vt = AppState.visitorTypes.find(v => v.id === id);
+          if (!vt) return;
+
+          showAlert(`Editing "${vt.name}" – fields editor next`, 'info');
+        }
+
+        function deleteVisitorType(id) {
+          const vt = AppState.visitorTypes.find(v => v.id === id);
+          if (!vt || vt.isDefault) return;
+
+          if (!confirm(`Delete visitor type "${vt.name}"?`)) return;
+
+          AppState.visitorTypes =
+            AppState.visitorTypes.filter(v => v.id !== id);
+
+          AppState.save();
+          renderVisitorTypes();
+        }
+
+        function openAddVisitorTypeModal() {
+          showAlert('Add Visitor Type modal – coming next', 'info');
+        }
+
+
+        // ===============================
+        // FIRESTORE REALTIME VISITOR SYNC
+        // FINAL • SINGLE SOURCE OF TRUTH
+        // ===============================
+
+        window.__UNSUBS__ = window.__UNSUBS__ || [];
+
+        function startCompanyListeners(companyId) {
+            if (!companyId) return;
+
+            // 🔥 Cleanup any existing listeners (login switch / reload safe)
+            if (Array.isArray(window.__UNSUBS__)) {
+                window.__UNSUBS__.forEach(fn => {
+                    try { fn && fn(); } catch (e) {}
+                });
+            }
+            window.__UNSUBS__ = [];
+
+            // Firestore not ready yet → retry silently
+            if (!window.fs || !window.fs._firestoreReady) {
+                setTimeout(() => startCompanyListeners(companyId), 500);
+                return;
+            }
+
+            /* ===============================
+               VISITORS LISTENER
+            =============================== */
+            const unsubVisitors = window.fs.listenVisitors(companyId, (visitors) => {
+
+                AppState.visitors = Array.isArray(visitors) ? visitors : [];
+                AppState.save();
+
+                // Dashboard update (safe)
+                if (document.getElementById('dashboardSection')?.style.display !== 'none') {
+                    if (typeof updateDashboard === 'function') {
+                        updateDashboard();
+                    }
+                }
+
+                // Analytics update (safe)
+                if (document.getElementById('analyticsSection')?.style.display !== 'none') {
+                    if (typeof updateAnalytics === 'function') {
+                        updateAnalytics();
+                    }
+                }
+            });
+
+            /* ===============================
+               EMPLOYEES LISTENER
+            =============================== */
+            const unsubEmployees = window.fs.listenEmployees(companyId, (users) => {
+                AppState.users = users || {};
+                AppState.save();
+
+                if (typeof updateDashboard === 'function') {
+                    updateDashboard();
+                }
+            });
+
+            /* ===============================
+               BLOCK LIST LISTENER
+            =============================== */
+            const unsubBlockList = window.fs.listenBlockList(companyId, (list) => {
+                AppState.blockList = Array.isArray(list) ? list : [];
+                AppState.save();
+            });
+
+            // 🔒 Track unsubscribers
+            window.__UNSUBS__.push(
+                unsubVisitors,
+                unsubEmployees,
+                unsubBlockList
+            );
+        }
+                
+        // ===============================
+        // PUBLIC INVITE MODE DETECTION
+        // ===============================
+        (function detectPublicInviteMode() {
+
+            const params = new URLSearchParams(window.location.search);
+            const mode = params.get('mode');
+
+            if (mode !== 'public-invite') return;
+
+            const companyId = params.get('company');
+            const source = params.get('source');
+
+            // Hide ALL pages
+            document.querySelectorAll('.page').forEach(p =>
+                p.classList.remove('active')
+            );
+
+            if (!companyId) {
+                document.body.innerHTML =
+                    '<h3 style="padding:20px">Invalid invite link</h3>';
+                return;
+            }
+
+            // 🔒 Minimal fake user (NO LOGIN)
+            AppState.currentUser = {
+                role: 'PublicInvite',
+                companyId: companyId,
+                fullName: 'Visitor'
+            };
+            AppState.save();
+
+            // Flags
+            window.__KIOSK_MODE__ = true;
+            window.__PUBLIC_INVITE__ = true;
+
+            // Lock UI
+            enforceKioskUIRestrictions();
+            disableAllNavigationForPublic();
+
+            // 🔥 PUBLIC MODE = SINGLE PAGE ONLY
+            document.body.classList.add('public-invite-mode');
+
+            // Hide app chrome completely
+            document.querySelector('.app-container')?.classList.add('hidden');
+            document.querySelector('#dashboardPage')?.classList.remove('active');
+            document.querySelector('#loginPage')?.classList.remove('active');
+
+            // Convert modal → full page
+            const inviteModal = document.getElementById('inviteModal');
+            if (inviteModal) {
+                inviteModal.classList.add('active');
+                inviteModal.classList.add('public-fullpage');
+            }
+
+            // Open invite directly
+            showInviteModal();
+            applyPublicInviteFormRules();
+        })();
+
+        function applyPublicInviteFormRules() {
+            // Hide date & time groups completely
+            document.getElementById('inviteDate')
+                ?.closest('.form-group')
+                ?.classList.add('hidden');
+
+            document.getElementById('inviteTime')
+                ?.closest('.form-group')
+                ?.classList.add('hidden');
+
+            // Make sure values cannot be edited accidentally
+            document.getElementById('inviteDate')?.setAttribute('disabled', true);
+            document.getElementById('inviteTime')?.setAttribute('disabled', true);
+        }
+
+        function initializeUsers() {
+            return {
+                'admin@company.com': { dbid: Database.generateId('users'), password: 'admin123', role: 'Admin', fullName: 'Administrator', company: 'Demo Corp', status: 'active', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
+                'receptionist@company.com': { dbid: Database.generateId('users'), password: 'receptionist123', role: 'Receptionist', fullName: 'Receptionist Team', company: 'Demo Corp', status: 'active', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
+                'security@company.com': { dbid: Database.generateId('users'), password: 'security123', role: 'Security Officer', fullName: 'Security Team', company: 'Demo Corp', status: 'active', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
+                'employee@company.com': { dbid: Database.generateId('users'), password: 'employee123', role: 'Employee', fullName: 'Employee', company: 'Demo Corp', status: 'active', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() }
+            };
+        }
+
+
+        function openCompanySignup() {
+            const modal = document.getElementById('companySignupModal');
+            if (!modal || modal.classList.contains('active')) return;
+            if (modal) {
+                modal.classList.add('active');   // use same pattern as other modals
+            }
+        }
+
+        function closeCompanySignup() {
+            const modal = document.getElementById('companySignupModal');
+            if (modal) {
+                modal.classList.remove('active');
+            }
+
+            // Clear form when closing
+            const form = document.getElementById('companySignupForm');
+            if (form) {
+                form.reset();
+            }
+        }
+
+        async function submitCompanySignup(event) {
+            if (event && event.preventDefault) event.preventDefault();
+
+            const email        = document.getElementById('signupEmail').value.trim().toLowerCase();
+            const firstName    = document.getElementById('signupFirstName').value.trim();
+            const lastName     = document.getElementById('signupLastName').value.trim();
+            const phone        = document.getElementById('signupPhone').value.trim();
+            const companyName  = document.getElementById('signupCompanyName').value.trim();
+            const password     = document.getElementById('signupPassword').value;
+
+            if (!email || !firstName || !lastName || !password) {
+                showAlert('Please fill all mandatory fields (Email, First name, Last name, Password).', 'error');
+                return;
+            }
+
+            const passwordRule = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+            if (!passwordRule.test(password)) {
+                showAlert(
+                    'Password must be at least 8 characters and contain at least one capital letter, one lower case letter, and one number.',
+                    'error'
+                );
+                return;
+            }
+
+            if (!window.fs || !window.fs.createCompanyWithAdmin) {
+                showAlert('Cloud is not ready, please try again later.', 'error');
+                return;
+            }
+
+            const effectiveCompanyName = companyName || `${firstName} ${lastName}`;
+            const company = {
+                name: effectiveCompanyName,
+                email: email,
+                phone: phone || null
+            };
+
+            const adminUser = {
+                dbid: Database.generateId('users'),
+                password: password,
+                role: 'Admin',
+                fullName: `${firstName} ${lastName}`,
+                companyName: effectiveCompanyName,
+                email: email,
+                phone: phone || '',
+                status: 'active'
+            };
+
+            try {
+                const { companyId } = await window.fs.createCompanyWithAdmin(company, adminUser);
+                adminUser.companyId = companyId;
+
+                // Save user list
+                window.AppState.users = window.AppState.users || {};
+                window.AppState.users[adminUser.email] = adminUser;
+
+                // 🔥 Auto-login this admin
+                window.AppState.currentUser = {
+                    ...adminUser
+                };
+
+                if (window.AppState.save) window.AppState.save();
+
+                showAlert('Account created! You are now logged in.', 'success');
+                closeCompanySignup();
+
+                // Show dashboard directly
+                initializeDashboard();
+
+                // Start listeners
+                if (window.startCompanyListeners && companyId) {
+                    window.startCompanyListeners(companyId);
+                }
+
+            } catch (err) {
+                console.error('Error creating company/admin:', err);
+                showAlert('Could not create account. Please try again.', 'error');
+            }
+        }
+
+        function maybeShowSetPasswordPageFromUrl() {
+          // 🔹 Always reset password-related pages first
+          document.getElementById('setPasswordPage')?.classList.remove('active');
+          document.getElementById('expiredPage')?.classList.remove('active');
+
+          const params = new URLSearchParams(window.location.search);
+          if (params.get('mode') !== 'setup-password') return;
+
+          const email = (params.get('email') || '').toLowerCase();
+          const token = params.get('token') || '';
+
+          // 🔐 Invalid link → expired page
+          if (!email || !token) {
+            document.getElementById('loginPage')?.classList.remove('active');
+            document.getElementById('expiredPage')?.classList.add('active');
+            return;
+          }
+
+          // Store for later use
+          AppState.pendingPasswordSetup = { email, token };
+          AppState.save();
+
+          // Show Set Password page
+          const loginPage = document.getElementById('loginPage');
+          const setPage   = document.getElementById('setPasswordPage');
+
+          if (loginPage) loginPage.classList.remove('active');
+          if (setPage)   setPage.classList.add('active');
+
+          const emailInput = document.getElementById('setPasswordEmail');
+          if (emailInput) emailInput.value = email;
+        }
+
+        // AUTHENTICATION
+
+        // PASSWORD SETUP FROM EMAIL LINK
+        async function handleSetPassword(event) {
+          if (event && event.preventDefault) event.preventDefault();
+
+          // DOM elements (set-password page)
+          const passwordInput = document.getElementById('newPassword');
+          const confirmInput  = document.getElementById('confirmPassword');
+          const btn           = document.getElementById('setPasswordBtn');
+
+          // Basic DOM guards
+          if (!passwordInput || !confirmInput) {
+            showAlert('Password inputs not found on the page. Please refresh and try again.', 'error');
+            return;
+          }
+          if (!btn) {
+            showAlert('Save button not found. Please refresh and try again.', 'error');
+            return;
+          }
+
+          const password = String(passwordInput.value || '');
+          const confirm  = String(confirmInput.value || '');
+
+          // Basic checks
+          if (!password || !confirm) {
+            showAlert('Please enter your new password in both fields.', 'error');
+            return;
+          }
+          if (password !== confirm) {
+            showAlert('Passwords do not match.', 'error');
+            return;
+          }
+
+          // Client-side rule (mirror server)
+          const rule = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+          if (!rule.test(password)) {
+            showAlert(
+              'Password must be at least 8 characters and contain at least one uppercase, one lowercase, and one number.',
+              'error'
+            );
+            return;
+          }
+
+          // Read email + token from URL
+          const url   = new URL(window.location.href);
+          const email = (url.searchParams.get('email') || '').toLowerCase();
+          const token = url.searchParams.get('token') || '';
+
+          if (!email || !token) {
+            showAlert('Invalid or missing password setup link.', 'error');
+            return;
+          }
+
+          if (!window.completePasswordSetupFn || typeof window.completePasswordSetupFn !== 'function') {
+            showAlert('Password service is not ready. Please refresh and try again.', 'error');
+            return;
+          }
+
+          // Lock UI
+          const originalText = btn.textContent;
+          btn.disabled = true;
+          btn.setAttribute('aria-busy', 'true');
+          btn.textContent = 'Saving...';
+
+          try {
+
+            // Call the callable. The SDK returns an object with a `data` property.
+            const res = await window.completePasswordSetupFn({ email, token, newPassword: password });
+
+            // If server returns shape { data: { success: true } } check it.
+            const result = res && (res.data ?? res) ? (res.data ?? res) : null;
+
+            if (!result) {
+              // Unusual but handle gracefully
+              showAlert('Unexpected server response. Please try again.', 'error');
+              return;
+            }
+
+            // If you rely on a specific flag, check it (server returns { success: true } in your functions)
+            if (result.success === false) {
+              // Provide a friendly fallback message
+              const msg = result.message || 'Could not set password. Please try again.';
+              showAlert(msg, 'error');
+              return;
+            }
+
+            // Success path: update local cache if present
+            let user = AppState.users && AppState.users[email] ? AppState.users[email] : null;
+
+            if (!user && window.findEmployeeByEmail) {
+              try {
+                user = await window.findEmployeeByEmail(email);
+              } catch (err) {
+                console.warn('Could not reload user from Firestore', err);
+              }
+            }
+
+            if (user) {
+              user.password = password;
+              user.status = 'active';
+              AppState.users[email] = user;
+              AppState.currentUser = {
+                ...user,
+                email,
+                companyId: user.companyId || AppState.currentUser?.companyId,
+                companyName: user.companyName || user.company || AppState.currentUser?.companyName
+              };
+              try { AppState.save(); } catch (e) { console.warn('AppState.save() failed', e); }
+            }
+
+            // Clean URL & navigate to dashboard
+            url.searchParams.delete('mode');
+            url.searchParams.delete('email');
+            url.searchParams.delete('token');
+            window.history.replaceState({}, '', url.toString());
+
+            document.getElementById('setPasswordPage')?.classList.remove('active');
+            document.getElementById('loginPage')?.classList.remove('active');
+            document.getElementById('dashboardPage')?.classList.add('active');
+
+            initializeDashboard();
+            showAlert('Password set successfully. You are now logged in.', 'success');
+
+            document.getElementById('loginEmail').value = email;
+            document.getElementById('loginPassword').value = password;
+
+            // call your normal login handler
+            handleLogin({
+              preventDefault: () => {},
+              auto: true
+            });
+
+
+            } catch (err) {
+              console.error('Failed to complete password setup (safe):', {
+                code: err?.code,
+                message: err?.message
+              });
+
+              const code = String(err?.code || '').toLowerCase();
+              const message = String(err?.message || '').toLowerCase();
+
+              // 🔐 Token already used OR expired → hard stop
+              if (
+                code.includes('failed-precondition') ||
+                message.includes('expired') ||
+                message.includes('already')
+              ) {
+                // Hide form, show expired page
+                document.getElementById('setPasswordPage')?.classList.remove('active');
+                document.getElementById('loginPage')?.classList.remove('active');
+                document.getElementById('expiredPage')?.classList.add('active');
+
+                showAlert(
+                  'This password setup link has already been used or has expired. Please request a new one.',
+                  'error'
+                );
+                return;
+              }
+
+              // Weak password / validation errors
+              if (
+                code.includes('invalid-argument') ||
+                message.includes('weak password')
+              ) {
+                showAlert(
+                  'Weak password: must be at least 8 characters and include uppercase, lowercase and a number.',
+                  'error'
+                );
+                return;
+              }
+
+              // Account not found
+              if (code.includes('not-found')) {
+                showAlert('No account found for this email.', 'error');
+                return;
+              }
+
+              // Fallback
+              showAlert(
+                err?.message || 'Failed to set password. Please try again.',
+                'error'
+              );
+
+            } finally {
+              btn.disabled = false;
+              btn.removeAttribute('aria-busy');
+              btn.textContent = originalText;
+            }
+        }
+
+
+        // FORGOT PASSWORD FLOW – REQUEST RESET LINK
+        async function handleForgotPassword(event) {
+          event.preventDefault();
+
+          const emailInput = document.getElementById('forgotEmail');
+          const btn = document.getElementById('forgotPasswordBtn');
+
+          const email = (emailInput.value || '').trim().toLowerCase();
+
+          if (!email) {
+            showAlert('Please enter your work email.', 'error');
+            return;
+          }
+
+          if (!window.requestPasswordResetFn) {
+            showAlert('Password reset service is not ready. Please refresh and try again.', 'error');
+            return;
+          }
+
+          // 🔒 Disable button + show "Sending..."
+          const originalText = btn.textContent;
+          btn.disabled = true;
+          btn.textContent = 'Sending...';
+          btn.setAttribute('aria-busy', 'true');
+
+          try {
+            // Call backend callable: requestPasswordReset
+            await window.requestPasswordResetFn({ email });
+
+            showAlert(
+              'If this email exists in our system, a reset link has been sent.',
+              'success'
+            );
+
+            // Go back to login
+            switchPage('loginPage');
+
+          } catch (err) {
+            console.error('Error requesting password reset:', err);
+
+            const code = String(err?.code || '');
+
+            if (code.includes('not-found')) {
+              showAlert('No account found with this email address.', 'error');
+            } else if (code.includes('failed-precondition')) {
+              showAlert('Email service is not configured. Please contact admin.', 'error');
+            } else {
+              showAlert('Could not send reset link. Please try again later.', 'error');
+            }
+
+          } finally {
+            // 🔓 Restore button
+            btn.disabled = false;
+            btn.textContent = originalText;
+            btn.removeAttribute('aria-busy');
+          }
+        }
+
+
+    async function handleLogin(event) {
+        event.preventDefault();
+
+        const emailInput = document.getElementById('loginEmail');
+        const passInput  = document.getElementById('loginPassword');
+        const btn        = document.getElementById('loginBtn');
+        const btnText    = btn?.querySelector('.btn-text');
+
+        const email = emailInput.value.trim().toLowerCase();
+        const password = passInput.value;
+
+        // 🔒 Lock button immediately
+        if (btn) btn.disabled = true;
+        if (btnText) btnText.textContent = 'Signing In...';
+
+        try {
+            // 1️⃣ Basic validation
+            if (!email || !password) {
+                showAlert('Please enter both email and password.', 'error');
+                return;
+            }
+
+            let user = AppState.users[email];
+
+            // 2️⃣ Fetch from Firestore if not cached
+            if (!user && window.findEmployeeByEmail) {
+                showAlert('Checking your account, please wait...', 'info');
+
+                user = await window.findEmployeeByEmail(email);
+
+                if (!user) {
+                    showAlert('User not found. Please check the email or contact admin.', 'error');
+                    return;
+                }
+
+                AppState.users[email] = user;
+                AppState.save();
+            }
+
+            // 3️⃣ Still not found
+            if (!user) {
+                showAlert('User not found. Please check the email or contact admin.', 'error');
+                return;
+            }
+
+            // 4️⃣ Password checks
+            if (!user.password) {
+                showAlert('This account has no password set. Please contact admin.', 'error');
+                return;
+            }
+
+            if (user.password !== password) {
+                showAlert('Incorrect password. Please try again.', 'error');
+                return;
+            }
+
+            // 5️⃣ SUCCESS — set current user
+            AppState.currentUser = {
+                ...user,
+                email,
+                companyId: user.companyId || 'DEFAULT-COMPANY',
+                companyName: user.companyName || user.company || 'Default Company'
+            };
+
+            AppState.save();
+
+            // Start listeners (non-blocking)
+            if (window.startCompanyListeners && AppState.currentUser.companyId) {
+                window.startCompanyListeners(AppState.currentUser.companyId);
+            }
+
+            // 🔁 IMPORTANT: defer dashboard init to next tick
+            setTimeout(() => {
+                initializeDashboard();
+            }, 0);
+
+            showAlert(`Welcome ${user.fullName}!`, 'success');
+
+        } catch (err) {
+            console.error('Error during login:', err);
+            showAlert(
+                'Unable to sign in due to a server or network error. Please try again.',
+                'error'
+            );
+        } finally {
+            // 🔓 Always restore button if login page is still visible
+            const loginPageActive = document.getElementById('loginPage')?.classList.contains('active');
+
+            if (loginPageActive) {
+                if (btn) btn.disabled = false;
+                if (btnText) btnText.textContent = 'Sign In';
+            }
+        }
+    }
+
+        function logout() {
+            if (Array.isArray(window.__UNSUBS__)) {
+              window.__UNSUBS__.forEach(fn => fn && fn());
+              window.__UNSUBS__ = [];
+            }
+            stopDashboardAutoRefresh();
+
+            AppState.currentUser = null;
+            AppState.visitors = [];
+            AppState.blockList = [];
+
+            AppState.save();
+
+            // Remove active states
+            document.getElementById("dashboardPage").classList.remove("active");
+            document.getElementById("loginPage").classList.add("active");
+
+            // Optional: clear login form
+            const form = document.getElementById("loginForm");
+            if (form) form.reset();
+
+            showAlert("Logged out successfully", "success");
+        }
+
+        function resetToKioskHome(delay = 1500) {
+
+            setTimeout(() => {
+                window.__KIOSK_SCAN__ = false;
+                window.__KIOSK_CHECKIN__ = false;
+
+                // Close all modals
+                document.querySelectorAll('.modal').forEach(m =>
+                    m.classList.remove('active')
+                );
+
+                // Stop scanner if running
+                if (window.stopCameraScanner) {
+                    stopCameraScanner();
+                }
+
+                // Hide all pages
+                document.querySelectorAll('.page').forEach(p =>
+                    p.classList.remove('active')
+                );
+
+                // Show kiosk home again
+                document.getElementById('kioskHomePage')?.classList.add('active');
+            }, delay);
+        }
+
+        function enforceKioskUIRestrictions() {
+            const sidebar = document.getElementById('sidebar');
+            const topNav = document.querySelector('.top-nav');
+
+            if (sidebar) sidebar.style.display = 'none';
+            if (topNav) topNav.style.display = 'none';
+
+        }
+
+        function disableAllNavigationForPublic() {
+            window.__PUBLIC_NAV_LOCK__ = true;
+        }
+
+        function initializeDashboard() {
+
+        // 🔒 KIOSK MODE — HARD STOP
+        if (AppState.currentUser?.role === 'Kiosk') {
+
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(p =>
+                p.classList.remove('active')
+            );
+
+            // Show kiosk home
+            enforceKioskUIRestrictions();
+            document.getElementById('kioskHomePage').classList.add('active');
+
+
+            // Generate QR once user + companyId exists
+            generateKioskQR();
+
+            return; // ⛔ prevent dashboard init
+            }
+
+            document.getElementById('loginPage').classList.remove('active');
+            document.getElementById('dashboardPage').classList.add('active');
+            updateUserProfile();
+            updateNavigation();
+            if (typeof updateDashboard === 'function') {
+                    updateDashboard();
+                }
+            }
+
+        function kioskOpenCheckIn() {
+
+            // 1️⃣ Hide kiosk home
+            document.getElementById('kioskHomePage')?.classList.remove('active');
+
+            // 2️⃣ Ensure dashboard shell is visible (required for modals)
+            document.getElementById('dashboardPage')?.classList.add('active');
+
+            // 3️⃣ Mark kiosk context
+            document.body.classList.add('kiosk-checkin-active');
+            window.__KIOSK_MODE__ = true;
+            window.__KIOSK_CHECKIN__ = true;
+
+            // 4️⃣ Hide date & time (walk-in = now)
+            document.getElementById('inviteDate')
+                ?.closest('.form-group')
+                ?.classList.add('hidden');
+
+            document.getElementById('inviteTime')
+                ?.closest('.form-group')
+                ?.classList.add('hidden');
+
+            // 5️⃣ Open check-in form
+            showInviteModal();
+        }
+
+        function handleCheckinCancel() {
+            document.body.classList.remove('kiosk-checkin-active');
+            const isKioskUser =
+                AppState.currentUser?.role === 'Kiosk' ||
+                window.__KIOSK_MODE__ === true;
+
+            /* ===============================
+               KIOSK USER → GO HOME
+            =============================== */
+            if (isKioskUser) {
+
+                // Clear kiosk sub-modes
+                window.__KIOSK_CHECKIN__ = false;
+                window.__KIOSK_SCAN__ = false;
+
+                // Stop camera if active
+                if (typeof stopCameraScanner === 'function') {
+                    stopCameraScanner();
+                }
+
+                // Force close all modals
+                document.querySelectorAll('.modal').forEach(m =>
+                    m.classList.remove('active')
+                );
+
+                // Return to kiosk home
+                showKioskHome();
+                return;
+            }
+
+            /* ===============================
+               NORMAL USER → JUST CLOSE MODAL
+            =============================== */
+            closeModal('inviteModal');
+
+            // Also stop camera if someone cancels scan from dashboard
+            if (typeof stopCameraScanner === 'function') {
+                stopCameraScanner();
+            }
+        }
+
+        function kioskOpenScan() {
+            // Hide kiosk home
+            document.getElementById('kioskHomePage')?.classList.remove('active');
+
+            // Mark kiosk scan context
+            window.__KIOSK_MODE__ = true;
+            window.__KIOSK_SCAN__ = true;
+
+            // Show dashboard container (needed for scan section)
+            document.getElementById('dashboardPage')?.classList.add('active');
+
+            // Show Scan section
+            document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
+            document.getElementById('checkInSection').style.display = 'block';
+
+            // UX hint
+            showKioskScanHint();
+
+            // Start camera scan immediately
+            startAutoScan();
+        }
+
+
+        // ===============================
+        // KIOSK PIN EXIT SYSTEM
+        // ===============================
+
+        (function setupKioskExit() {
+
+            let tapCount = 0;
+            let tapTimer = null;
+
+            const EXIT_PIN = '12345'; // 🔒 CHANGE THIS
+
+            const trigger = document.getElementById('kioskExitTrigger');
+            if (!trigger) return;
+
+            trigger.addEventListener('click', () => {
+
+                tapCount++;
+
+                // Reset tap count after 2 seconds
+                if (!tapTimer) {
+                    tapTimer = setTimeout(() => {
+                        tapCount = 0;
+                        tapTimer = null;
+                    }, 2000);
+                }
+
+                // 5 taps unlock PIN
+                if (tapCount >= 5) {
+                    tapCount = 0;
+                    clearTimeout(tapTimer);
+                    tapTimer = null;
+
+                    const pin = prompt('Enter Kiosk PIN');
+
+                    if (pin === EXIT_PIN) {
+                        exitKioskMode();
+                    } else {
+                        showAlert('Invalid PIN', 'error');
+                    }
+                }
+            });
+        })();
+
+        function exitKioskMode() {
+
+            // Clear kiosk flags
+            window.__KIOSK_MODE__ = false;
+            window.__PUBLIC_INVITE__ = false;
+
+            // Clear app state
+            AppState.currentUser = null;
+            AppState.save();
+
+            // Reload app to login screen
+            location.href = location.origin;
+        }
+
+        function showKioskScanHint() {
+            const container = document.querySelector('#checkInSection .card-body');
+            if (!container) return;
+
+            let hint = document.getElementById('kioskScanHint');
+            if (!hint) {
+                hint = document.createElement('div');
+                hint.id = 'kioskScanHint';
+                hint.className = 'info-box';
+                hint.style.marginBottom = '12px';
+                container.prepend(hint);
+            }
+
+            hint.innerHTML = `
+                <strong>Scan Visitor QR</strong><br>
+                Hold the QR code steady in front of the camera.
+            `;
+        }
+
+        function updateUserProfile() {
+            const initials = AppState.currentUser.fullName.split(' ').map(n => n[0]).join('').toUpperCase();
+            document.getElementById('userAvatar').textContent = initials;
+            document.getElementById('userName').textContent = AppState.currentUser.fullName;
+            document.getElementById('userRole').textContent = AppState.currentUser.role;
+        }
+
+        function updateNavigation() {
+            // defensive: ensure AppState and role exist
+            const role = (AppState && AppState.currentUser && AppState.currentUser.role) ? String(AppState.currentUser.role) : '';
+
+            const isAdmin = role === 'Admin';
+            const isReceptionist = role === 'Receptionist';
+            const isSecurity = role === 'Security Officer';
+            const isEmployee = role === 'Employee';
+
+            // helper to safely set display
+            const setDisplay = (id, value) => {
+                try {
+                    const el = document.getElementById(id);
+                    if (el) el.style.display = value;
+                } catch (e) { /* ignore DOM errors */ }
+            };
+
+            // Check-in should be available to Admin, Receptionist and Security
+            setDisplay('navCheckIn', (isAdmin || isReceptionist || isSecurity) ? 'flex' : 'none');
+
+            // Visitors should NOT be visible to Security — only Admin & Receptionist
+            setDisplay('navVisitors', (isAdmin || isReceptionist) ? 'flex' : 'none');
+
+            // Directory visible to Admin, Receptionist and Employee (not Security)
+            setDisplay('navDirectory', (isAdmin || isReceptionist || isEmployee) ? 'flex' : 'none');
+
+            // Admin section only to Admins
+            setDisplay('adminSection', isAdmin ? 'block' : 'none');
+        }
+
+       function navigateTo(section, el) {
+
+            // 🚫 HARD BLOCK: Kiosk users cannot navigate anywhere
+            if (AppState.currentUser?.role === 'Kiosk') {
+                return;
+            }
+
+            // Hide all sections + remove active
+            document.querySelectorAll('.section').forEach(s => {
+                s.style.display = 'none';
+                s.classList.remove('active');
+            });
+
+            // Remove active from all nav items
+            document.querySelectorAll('.nav-item').forEach(n =>
+                n.classList.remove('active')
+            );
+
+            // Section mapping
+            const sectionMap = {
+                dashboard: 'dashboardSection',
+                analytics: 'analyticsSection',
+                visitors: 'visitorsSection',
+                checkIn: 'checkInSection',
+                directory: 'directorySection',
+                employees: 'employeesSection',
+                security: 'securitySection',
+                settings: 'settingsSection'
+            };
+
+            // Show selected section + mark active
+            if (sectionMap[section]) {
+                const target = document.getElementById(sectionMap[section]);
+                if (target) {
+                    target.style.display = 'block';
+                    target.classList.add('active');
+                }
+            }
+
+            // Mark clicked nav item as active
+            if (el) {
+                el.classList.add('active');
+            }
+
+            /* -------------------------
+               SECTION-SPECIFIC LOGIC
+            --------------------------*/
+
+            if (section === 'dashboard') {
+                if (typeof updateDashboard === 'function') {
+                    updateDashboard();
+                }
+            }
+
+            if (section === 'analytics') {
+                if (typeof updateAnalytics === 'function') {
+                    updateAnalytics();
+                }
+            }
+
+            // 🔥 Auto start scanner when Scan is opened
+            if (section === 'checkIn') {
+                if (typeof startAutoScan === 'function') {
+                    startAutoScan();
+                }
+            }
+
+            // Auto-close sidebar (mobile)
+            if (typeof closeMobileSidebarIfOpen === 'function') {
+                closeMobileSidebarIfOpen();
+            }
+
+            // Re-render Lucide icons after DOM updates
+            if (window.lucide && typeof lucide.createIcons === 'function') {
+                lucide.createIcons();
+            }
+        }
+
+        // UI UTILITIES
+        function showAlert(message, type = 'info', duration = 5000) {
+            const alertEl = document.createElement('div');
+            alertEl.className = `alert alert-${type}`;
+            const icons = { success: '✓', error: '✕', warning: '!', info: 'ℹ' };
+            alertEl.innerHTML = `<span style="font-size: 18px; font-weight: 600;">${icons[type]}</span><span>${message}</span>`;
+            document.getElementById('alertContainer').appendChild(alertEl);
+            setTimeout(() => alertEl.remove(), duration);
+        }
+
+        function closeModal(modalId) {
+            // 🚫 Prevent closing invite modal in kiosk/public
+            if (
+                modalId === 'inviteModal' &&
+                (window.__KIOSK_MODE__ || window.__PUBLIC_INVITE__)
+            ) {
+                return;
+            }
+
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+        }
+
+        function formatDate(isoString) {
+            return new Date(isoString).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+        }
+
+        function toggleMobileSidebar() {
+            document.getElementById('sidebar').classList.toggle('mobile-open');
+        }
+
+        function closeMobileSidebarIfOpen() {
+            const sidebar = document.getElementById('sidebar');
+            if (sidebar && sidebar.classList.contains('mobile-open')) {
+                sidebar.classList.remove('mobile-open');
+            }
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // CSV FUNCTIONS
+        function downloadSampleCSV() {
+            // Header now includes "guests"
+            const header = "firstName,lastName,email,phone,guests,date,time\n";
+
+            // 2 example rows
+            const rows = [
+                "John,Doe,john@example.com,91XXXXXXXXXX,0,2025-12-10,14:00",
+                "Jane,Smith,jane@example.com,91XXXXXXXXXX,1,2025-12-11,15:00"
+            ];
+
+            const csvContent = header + rows.join("\n");
+
+            const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+            const url = URL.createObjectURL(blob);
+
+            const link = document.createElement("a");
+            link.setAttribute("href", url);
+            link.setAttribute("download", "visitors-sample.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            URL.revokeObjectURL(url);
+        }
+
+
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const csv = e.target.result;
+                document.getElementById('bulkInviteData').value = csv;
+                showAlert('CSV file loaded successfully!', 'success');
+            };
+            reader.onerror = function() {
+                showAlert('Error reading file', 'error');
+            };
+            reader.readAsText(file);
+        }
+
+        function handleDragOver(event) {
+            event.preventDefault();
+            document.getElementById('fileLabel').classList.add('dragover');
+        }
+
+        function handleDragLeave(event) {
+            event.preventDefault();
+            document.getElementById('fileLabel').classList.remove('dragover');
+        }
+
+        function handleDrop(event) {
+            event.preventDefault();
+            document.getElementById('fileLabel').classList.remove('dragover');
+            
+            const files = event.dataTransfer.files;
+            if (files.length > 0) {
+                document.getElementById('csvFileInput').files = files;
+                handleFileUpload({ target: { files: files } });
+            }
+        }
+
+        // ===============================
+        // DASHBOARD UPDATE
+        // ===============================
+        function updateDashboard() {
+            const visitors = AppState.visitors || [];
+            const todayStr = new Date().toDateString();
+
+            // 1️⃣ All-time Visitors
+            document.getElementById('totalVisitors').textContent = visitors.length;
+
+            // 2️⃣ Today's Visitors
+            const todaysVisitors = visitors.filter(v => {
+                const date = v.invitedAt || v.createdAt || v.checkedInAt;
+                return date && new Date(date).toDateString() === todayStr;
+            }).length;
+            document.getElementById('todayVisitors').textContent = todaysVisitors;
+
+            // 3️⃣ Checked-In → Currently Inside
+            const currentlyInside = visitors.filter(v =>
+                v.checkedInAt && !v.checkedOutAt
+            ).length;
+            document.getElementById('currentlyInside').textContent = currentlyInside;
+
+            // 4️⃣ Checked-Out → Today's Check-Out
+            const todaysCheckouts = visitors.filter(v =>
+                v.checkedOutAt && new Date(v.checkedOutAt).toDateString() === todayStr
+            ).length;
+            document.getElementById('todayCheckout').textContent = todaysCheckouts;
+
+            // refresh tables
+            updateRecentVisitorsTable();
+            updateAllVisitorsTable();
+            updateDirectoryTable();
+            updateEmployeesTable();
+            updateBlockListTable();
+        }
+
+
+        // ===============================
+        // RECENT VISITORS TABLE
+        // ===============================
+        function updateRecentVisitorsTable() {
+            const visitors = AppState.visitors.slice().reverse().slice(0, 5);
+            const tbody = document.getElementById('recentVisitorsTable');
+
+            if (!visitors.length) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:40px;color:var(--gray-700);">No visitors yet</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = visitors.map(v => `
+                <tr>
+                    <td><strong>${escapeHtml(v.fullName)}</strong><br>
+                        <span style="font-size:11px;color:var(--gray-700);">${v.dbid}</span>
+                    </td>
+                    <td>${escapeHtml(v.email)}</td>
+                    <td>${v.date || 'N/A'}</td>
+                    <td><span class="status-badge status-${v.status}">${v.status.toUpperCase()}</span></td>
+                    <td><button class="btn btn-sm btn-secondary" onclick="showVisitorDetails('${v.id}')">View</button></td>
+                </tr>
+            `).join('');
+        }
+
+
+        // ===============================
+        // ALL VISITORS TABLE
+        // ===============================
+        function updateAllVisitorsTable() {
+            const tbody = document.getElementById('allVisitorsTable');
+
+            if (!AppState.visitors.length) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--gray-700);">No visitors yet</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = AppState.visitors.map(v => `
+                <tr>
+                    <td><strong>${escapeHtml(v.fullName)}</strong><br>
+                        <span style="font-size:11px;color:var(--gray-700);">${v.dbid}</span>
+                    </td>
+                    <td>${escapeHtml(v.email)}</td>
+                    <td>
+                      ${v.checkedInAt
+                        ? new Date(v.checkedInAt).toLocaleDateString('en-IN')
+                        : (v.date || 'N/A')}
+                    </td>
+
+                    <td>
+                      ${v.checkedInAt
+                        ? new Date(v.checkedInAt).toLocaleTimeString('en-IN', {
+                            hour: '2-digit',
+                            minute: '2-digit'
+                          })
+                        : '-'}
+                    </td>
+                    <td><span class="status-badge status-${v.status}">${v.status.toUpperCase()}</span></td>
+                    <td>
+                        <button class="btn btn-sm btn-secondary" onclick="showVisitorDetails('${v.id}')">View</button>
+                        <button class="btn btn-sm btn-secondary" onclick="showVisitorQR('${v.id}')">QR</button>
+                        <button class="btn btn-sm btn-secondary" onclick="showEditVisitorModal('${v.id}')">Edit</button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteVisitor('${v.id}')">Delete</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+
+        // ===============================
+        // DIRECTORY TABLE
+        // ===============================
+        function updateDirectoryTable() {
+            const tbody = document.getElementById('directoryTable');
+            const employees = Object.entries(AppState.users)
+                .filter(([_, u]) => u.role !== 'Employee')
+                .map(([email, user]) => ({ email, ...user }));
+
+            if (!employees.length) {
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:40px;color:var(--gray-700);">No employees found</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = employees.map(emp => `
+                <tr>
+                    <td>${escapeHtml(emp.fullName)}</td>
+                    <td>${escapeHtml(emp.email)}</td>
+                    <td>${emp.role}</td>
+                    <td>${emp.company}</td>
+                </tr>
+            `).join('');
+        }
+
+
+        // ===============================
+        // EMPLOYEES TABLE
+        // ===============================
+        function updateEmployeesTable() {
+            const tbody = document.getElementById('employeesTable');
+            const employees = Object.entries(AppState.users)
+                .filter(([email]) => email !== 'admin@company.com')
+                .map(([email, user]) => ({ email, ...user }));
+
+            if (!employees.length) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:40px;color:var(--gray-700);">No employees</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = employees.map(emp => `
+                <tr>
+                    <td>${escapeHtml(emp.fullName)}<br>
+                        <span style="font-size:11px;color:var(--gray-700);">${emp.dbid}</span>
+                    </td>
+                    <td>${escapeHtml(emp.email)}</td>
+                    <td>${emp.role}</td>
+                    <td><span class="status-badge status-approved">${(emp.status || 'active').toUpperCase()}</span></td>
+                    <td><button class="btn btn-sm btn-danger" onclick="removeEmployee('${emp.email}')">Remove</button></td>
+                </tr>
+            `).join('');
+        }
+
+
+        // ===============================
+        // BLOCK LIST
+        // ===============================
+        function updateBlockListTable() {
+            const div = document.getElementById('blockListTable');
+
+            if (!AppState.blockList.length) {
+                div.innerHTML = '<p style="color:var(--gray-700);">No blocked emails</p>';
+                return;
+            }
+
+            div.innerHTML = AppState.blockList.map((item, i) => `
+                <div style="background:var(--error-light);border-radius:8px;padding:12px;margin-bottom:8px;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;">
+                        <span>${escapeHtml(item.email)}</span>
+                        <button class="btn btn-sm btn-danger" onclick="removeFromBlockList(${i})">Remove</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+
+        // ===============================
+        // DASHBOARD AUTO REFRESH (30s)
+        // ===============================
+        let dashboardAutoRefreshTimer = null;
+
+        function startDashboardAutoRefresh() {
+            stopDashboardAutoRefresh();
+            dashboardAutoRefreshTimer = setInterval(() => {
+                if (!AppState.currentUser) return;
+                if (typeof updateDashboard === 'function') {
+                    updateDashboard();
+                }
+
+                renderTodayActivityChart();
+            }, 30000);
+        }
+
+        function stopDashboardAutoRefresh() {
+            if (dashboardAutoRefreshTimer) {
+                clearInterval(dashboardAutoRefreshTimer);
+                dashboardAutoRefreshTimer = null;
+            }
+        }
+
+        // ===============================
+        // DASHBOARD CHART (TODAY)
+        // ===============================
+        let todayChart = null;
+
+        function renderTodayActivityChart() {
+            const visitors = AppState.visitors || [];
+            const todayStr = new Date().toDateString();
+
+            const todayVisitors = visitors.filter(v =>
+                (v.invitedAt || v.createdAt || v.checkedInAt) &&
+                new Date(v.invitedAt || v.createdAt || v.checkedInAt).toDateString() === todayStr
+            ).length;
+
+            const currentlyInside = visitors.filter(v => v.checkedInAt && !v.checkedOutAt).length;
+            const todayCheckout = visitors.filter(v =>
+                v.checkedOutAt && new Date(v.checkedOutAt).toDateString() === todayStr
+            ).length;
+
+            const canvas = document.getElementById('todayActivityChart');
+            if (!canvas) return;
+
+            if (todayChart) todayChart.destroy();
+
+            todayChart = new Chart(canvas, {
+                type: 'bar',
+                data: {
+                    labels: ['Visitors', 'Checked-In', 'Checked-Out'],
+                    datasets: [{
+                        data: [todayVisitors, currentlyInside, todayCheckout],
+                        backgroundColor: [
+                            'rgba(203,12,159,0.7)',
+                            'rgba(130,214,22,0.7)',
+                            'rgba(23,193,232,0.7)'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
+                }
+            });
+        }
+
+        // ===============================
+        // KIOSK QR GENERATION
+        // ===============================
+        function generateKioskQR() {
+            const canvas = document.getElementById('kioskQrCode');
+            if (!canvas) return;
+
+            const companyId = AppState.currentUser?.companyId;
+            if (!companyId) return;
+
+            const publicInviteLink =
+                `${window.location.origin}` +
+                `/?mode=public-invite` +
+                `&company=${encodeURIComponent(companyId)}` +
+                `&source=kiosk`;
+
+            try {
+                // Clear previous QR (important if reloaded)
+                canvas.innerHTML = '';
+
+                new QRCode(canvas, {
+                    text: publicInviteLink,
+                    width: 180,
+                    height: 180,
+                    colorDark: '#000000',
+                    colorLight: '#ffffff',
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+            } catch (err) {
+                console.error('Kiosk QR generation failed:', err);
+            }
+        }
+
+        function updateInviteFormContext() {
+            const title = document.querySelector('#inviteModal .modal-title');
+            if (!title) return;
+
+            // Create subtitle if not present
+            let subtitle = document.querySelector('#inviteModal .modal-subtitle');
+            if (!subtitle) {
+                subtitle = document.createElement('p');
+                subtitle.className = 'modal-subtitle';
+                subtitle.style.marginTop = '4px';
+                subtitle.style.fontSize = '13px';
+                subtitle.style.color = '#6b7280';
+                title.after(subtitle);
+            }
+
+            if (window.__PUBLIC_INVITE__) {
+                title.textContent = 'Visitor Check-in';
+                subtitle.textContent = 'Fill this form to enter the premises';
+            } 
+            else if (window.__KIOSK_MODE__) {
+                title.textContent = 'Visitor Check-in';
+                subtitle.textContent = 'Reception assisted check-in';
+            } 
+            else {
+                title.textContent = 'Invite Visitor';
+                subtitle.textContent = 'Schedule a visit in advance';
+            }
+
+            // Button label
+            const submitBtn = document.querySelector('#inviteModal .btn.btn-primary');
+            if (submitBtn) {
+                submitBtn.textContent =
+                    (window.__KIOSK_MODE__ || window.__PUBLIC_INVITE__)
+                        ? 'Check-in Now'
+                        : 'Send Invite';
+            }
+        }
+
+        // VISITOR MANAGEMENT
+        function showInviteModal() {
+            openModal('inviteModal');
+            updateInviteFormContext();
+        }
+
+        function showBulkInviteModal() {
+            document.getElementById('csvFileInput').value = '';
+            document.getElementById('bulkInviteData').value = '';
+            openModal('bulkInviteModal');
+        }
+
+        function submitInvite() {
+    const firstName = document.getElementById('inviteFirstName').value.trim();
+    const lastName  = document.getElementById('inviteLastName').value.trim();
+    const email     = document.getElementById('inviteEmail').value.trim().toLowerCase();
+    const phone     = document.getElementById('invitePhone').value.trim();
+    const guestsRaw = document.getElementById('inviteGuests').value;
+    const guests    = parseInt(guestsRaw || '0', 10) || 0;
+
+    const isKioskMode  = window.__KIOSK_MODE__ === true;
+    const isPublicMode = window.__PUBLIC_INVITE__ === true;
+
+    const now = new Date();
+    const nowIso = now.toISOString();
+
+    /* =====================================================
+       ✅ KIOSK / PUBLIC → CHECK-OUT EXISTING VISITOR
+    ====================================================== */
+    if (isKioskMode || isPublicMode) {
+        const existing = AppState.visitors.find(v =>
+            v.email.toLowerCase() === email &&
+            v.checkedInAt &&
+            !v.checkedOutAt
+        );
+
+        if (existing) {
+            existing.status = 'checked-out';
+            existing.checkedOutAt = nowIso;
+            existing.updatedAt = nowIso;
+
+            AppState.save();
+            if (typeof updateDashboard === 'function') {
+                updateDashboard();
+            }
+
+            // 🔊 + 📳 FEEDBACK
+            playSuccessBeep();
+            vibrateDevice(120);
+
+            showAlert('Checked out successfully', 'success');
+
+            if (isKioskMode) {
+                closeModal('inviteModal');
+                document.getElementById('inviteForm').reset();
+                resetToKioskHome();
+            }
+
+            return; // ⛔ STOP — do NOT create a new visitor
+        }
+    }
+
+    /* =====================================================
+       🟢 NORMAL CHECK-IN / INVITE FLOW
+    ====================================================== */
+
+    let date, time;
+
+    if (isKioskMode || isPublicMode) {
+        date = nowIso.split('T')[0];
+        time = now.toTimeString().slice(0, 5);
+    } else {
+        date = document.getElementById('inviteDate').value.trim();
+        time = document.getElementById('inviteTime').value.trim();
+    }
+
+    if (!firstName || !lastName || !email || (!isKioskMode && !isPublicMode && (!date || !time))) {
+        playErrorSiren();
+        vibrateDevice(200);
+        showAlert('Please fill all required fields', 'error');
+        return;
+    }
+
+    if (AppState.blockList.some(b => b.email === email)) {
+        playErrorSiren();
+        vibrateDevice(200);
+        showAlert('This visitor is blocked', 'error');
+        return;
+    }
+
+    const companyId = AppState.currentUser?.companyId;
+    if (!companyId) {
+        playErrorSiren();
+        vibrateDevice(200);
+        showAlert('Missing company. Please log in again.', 'error');
+        return;
+    }
+
+    const fullName = `${firstName} ${lastName}`;
+
+    const visitor = {
+        id: Math.random().toString(36).substring(2, 11),
+        dbid: Database.generateId('visitors'),
+
+        visitorTypeId: 'VT-DEFAULT',
+
+        firstName,
+        lastName,
+        fullName,
+        email,
+        phone,
+        guests,
+        date,
+        time,
+
+        status: (isKioskMode || isPublicMode) ? 'checked-in' : 'invited',
+        checkedInAt: (isKioskMode || isPublicMode) ? nowIso : null,
+        checkedOutAt: null,
+
+        invitedAt: nowIso,
+        invitedBy: AppState.currentUser.fullName,
+        createdAt: nowIso,
+        updatedAt: nowIso,
+
+        source: isPublicMode
+            ? 'public-invite'
+            : (isKioskMode ? 'kiosk' : 'dashboard')
+    };
+
+    const afterSuccess = () => {
+
+        // 🔊 + 📳 SUCCESS FEEDBACK
+        playSuccessBeep();
+        vibrateDevice(120);
+
+        if (isPublicMode) {
+            window.__KIOSK_MODE__ = false;
+            window.__PUBLIC_INVITE__ = false;
+
+            document.body.innerHTML = `
+                <div style="
+                    display:flex;
+                    flex-direction:column;
+                    justify-content:center;
+                    align-items:center;
+                    height:100vh;
+                    font-family:system-ui;
+                    text-align:center;
+                ">
+                    <img src="img/logo.png" style="width:120px;margin-bottom:16px;">
+                    <h2>✅ You are checked in</h2>
+                    <p>You may proceed inside.</p>
+                </div>
+            `;
+            return;
+        }
+
+        if (isKioskMode) {
+            showAlert(`Welcome ${fullName}!`, 'success');
+            closeModal('inviteModal');
+            document.getElementById('inviteForm').reset();
+            document.body.classList.remove('kiosk-checkin-active');
+            resetToKioskHome();
+            return;
+        }
+
+        showAlert(`Invitation created for ${fullName}!`, 'success');
+        closeModal('inviteModal');
+        document.getElementById('inviteForm').reset();
+
+        if (typeof updateDashboard === 'function') {
+            updateDashboard();
+        }
+        renderTodayActivityChart();
+    };
+
+    if (window.fs && window.fs.addVisitor) {
+        window.fs.addVisitor(companyId, visitor)
+            .then(() => {
+                if (window.sendInviteEmailFn) {
+                    window.sendInviteEmailFn({
+                        email,
+                        fullName,
+                        date,
+                        time,
+                        dbid: visitor.dbid,
+                        qrId: visitor.id,
+                        guests,
+                        hostName: AppState.currentUser.fullName,
+                        companyName: AppState.currentUser.companyName || '',
+                        location: AppState.currentUser.companyAddress || ''
+                    }).catch(() => {
+                        playErrorSiren();
+                        vibrateDevice(150);
+                        showAlert('Saved, but email could not be sent.', 'warning');
+                    });
+                }
+                afterSuccess();
+            })
+            .catch(() => {
+                playErrorSiren();
+                vibrateDevice(150);
+                showAlert('Cloud save failed. Stored locally.', 'warning');
+                afterSuccess();
+            });
+    } else {
+        playErrorSiren();
+        vibrateDevice(150);
+        showAlert('Saved locally (offline mode)', 'warning');
+        afterSuccess();
+    }
+}
+
+        async function processBulkInvite() {
+            const csv = document.getElementById("bulkInviteData").value;
+
+            if (!csv.trim()) {
+                showAlert("Please paste CSV data or upload a file", "error");
+                return;
+            }
+
+            const companyId = AppState.currentUser?.companyId;
+            if (!companyId) {
+                showAlert("Missing company. Please log in again.", "error");
+                return;
+            }
+
+            const lines = csv.split("\n").filter((l) => l.trim());
+            if (!lines.length) {
+                showAlert("No rows found in CSV data", "error");
+                return;
+            }
+
+            let success = 0;
+            const errors = [];
+            const ops = [];
+
+            lines.forEach((line, i) => {
+                const rowIndex = i + 1;
+
+                const parts = line.split(",").map((p) => p.trim());
+
+                // Expect 7 columns: firstName,lastName,email,phone,guests,date,time
+                if (parts.length < 7) {
+                    errors.push(`Row ${rowIndex}: Expected 7 columns, found ${parts.length}`);
+                    return;
+                }
+
+                const [firstName, lastName, email, phone, guestsRaw, date, time] = parts;
+
+                if (!email || !email.includes("@")) {
+                    errors.push(`Row ${rowIndex}: Invalid email`);
+                    return;
+                }
+                if (!firstName || !lastName || !date || !time) {
+                    errors.push(`Row ${rowIndex}: Missing required fields`);
+                    return;
+                }
+
+                const guestsParsed = parseInt(guestsRaw || "0", 10);
+                const guests = Number.isNaN(guestsParsed) ? 0 : guestsParsed;
+
+                const fullName = `${firstName} ${lastName}`;
+                const visitor = {
+                    id: Math.random().toString(36).substring(2, 11),
+                    dbid: Database.generateId("visitors"),
+
+                    // 🔗 VISITOR TYPE (DEFAULT)
+                    visitorTypeId: 'VT-DEFAULT',
+
+                    firstName,
+                    lastName,
+                    fullName,
+                    email,
+                    phone: phone || "",
+                    guests,
+                    date,
+                    time,
+
+                    status: "invited",
+                    invitedAt: new Date().toISOString(),
+                    invitedBy: AppState.currentUser.fullName,
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString(),
+                };
+
+                // For each valid row, define an async operation
+                const op = (async () => {
+                    try {
+                        // 1️⃣ Save visitor (Firestore if available)
+                        if (window.fs && window.fs.addVisitor) {
+                            await window.fs.addVisitor(companyId, visitor);
+                        }
+                        AppState.visitors.push(visitor);
+                        success++;
+
+                        // 2️⃣ Send invite email (if function wired)
+                        if (window.sendInviteEmailFn) {
+                            try {
+                                await window.sendInviteEmailFn({
+                                    email,
+                                    fullName,
+                                    date,
+                                    time,
+                                    dbid: visitor.dbid,
+                                    qrId: visitor.id,
+                                    guests,
+                                    hostName: AppState.currentUser.fullName,
+                                    companyName:
+                                        AppState.currentUser.companyName ||
+                                        AppState.currentUser.company ||
+                                        "",
+                                    location: AppState.currentUser.companyAddress || "",
+                                });
+                            } catch (emailErr) {
+                                console.error(
+                                    "Bulk invite email error for row",
+                                    rowIndex,
+                                    emailErr
+                                );
+                                errors.push(`Row ${rowIndex}: Email send failed`);
+                            }
+                        }
+                    } catch (err) {
+                        console.error("Bulk Firestore error for row", rowIndex, err);
+                        errors.push(`Row ${rowIndex}: Failed to upload invite`);
+                    }
+                })();
+
+                ops.push(op);
+            });
+
+            // Wait for all Firestore + email operations to finish
+            if (ops.length) {
+                await Promise.all(ops);
+            }
+
+            AppState.save();
+
+            if (success > 0) {
+                showAlert(
+                    `Imported ${success} visitors${errors.length ? ` (${errors.length} errors)` : ""}`,
+                    "success"
+                );
+            } else {
+                showAlert(
+                    `No visitors imported${errors.length ? ` (${errors.length} errors)` : ""}`,
+                    "error"
+                );
+            }
+
+            if (errors.length) {
+                console.warn("Bulk import finished with errors:", errors);
+            }
+
+            closeModal("bulkInviteModal");
+            document.getElementById("bulkInviteData").value = "";
+            document.getElementById("csvFileInput").value = "";
+            if (typeof updateDashboard === 'function') {
+                updateDashboard();
+            }
+            renderTodayActivityChart();
+        }
+
+        function showVisitorDetails(visitorId) {
+            const visitor = AppState.visitors.find(v => v.id === visitorId);
+
+            if (!visitor) return;
+
+            const detailsHtml = `
+                <div style="background: var(--gray-50); padding: 16px; border-radius: 8px; margin-bottom: 16px;">
+                    <p><strong>Database ID:</strong> <span style="font-family: monospace; background: var(--white); padding: 2px 6px; border-radius: 4px;">${visitor.dbid}</span></p>
+                    <p style="margin-top: 8px;"><strong>Name:</strong> ${escapeHtml(visitor.fullName)}</p>
+                    <p style="margin-top: 8px;"><strong>Email:</strong> ${escapeHtml(visitor.email)}</p>
+                    <p style="margin-top: 8px;"><strong>Phone:</strong> ${visitor.phone || 'N/A'}</p>
+                    <p style="margin-top: 8px;"><strong>Date:</strong> ${visitor.date || 'N/A'}</p>
+                    <p style="margin-top: 8px;"><strong>Time:</strong> ${visitor.time || 'N/A'}</p>
+                    <p style="margin-top: 8px;"><strong>Status:</strong> <span class="status-badge status-${visitor.status}">${visitor.status.toUpperCase()}</span></p>
+                    ${visitor.checkedInAt ? `<p style="margin-top: 8px;"><strong>Checked In:</strong> ${formatDate(visitor.checkedInAt)}</p>` : ''}
+                    ${visitor.checkedOutAt ? `<p style="margin-top: 8px;"><strong>Checked Out:</strong> ${formatDate(visitor.checkedOutAt)}</p>` : ''}
+                </div>
+            `;
+
+            let footerHtml = `<button class="btn btn-secondary" onclick="closeModal('visitorActionModal')">Close</button>`;
+
+            if (visitor.status === 'invited' && (AppState.currentUser.role === 'Security Officer' || AppState.currentUser.role === 'Admin')) {
+                footerHtml = `
+                    <button class="btn btn-secondary" onclick="closeModal('visitorActionModal')">Close</button>
+                    <button class="btn btn-danger" onclick="rejectVisitor('${visitorId}')">Reject</button>
+                    <button class="btn btn-success" onclick="approveVisitor('${visitorId}')">Approve</button>
+                `;
+            }
+
+            document.getElementById('visitorDetailsContent').innerHTML = detailsHtml;
+            document.getElementById('visitorActionFooter').innerHTML = footerHtml;
+            openModal('visitorActionModal');
+        }
+
+        function approveVisitor(visitorId) {
+            const visitor = AppState.visitors.find(v => v.id === visitorId);
+            if (!visitor) {
+                showAlert('Visitor not found', 'error');
+                return;
+            }
+
+            if (visitor.status === 'approved') {
+                showAlert('Visitor is already approved', 'info');
+                return;
+            }
+
+            const companyId = AppState.currentUser?.companyId;
+
+            // Local update
+            visitor.status = 'approved';
+            visitor.updatedAt = new Date().toISOString();
+            AppState.save();
+            if (typeof updateDashboard === 'function') {
+                updateDashboard();
+            }
+            renderTodayActivityChart();
+            closeModal('visitorActionModal');
+            showAlert('Visitor approved!', 'success');
+
+            // Firestore sync (if available)
+            if (window.fs && window.fs.updateVisitor && visitor.firestoreId && companyId) {
+                window.fs.updateVisitor(companyId, visitor.firestoreId, {
+                    status: 'approved'
+                }).catch(err => {
+                    console.error('Error updating visitor in Firestore (approve):', err);
+                    showAlert('Cloud sync failed for approval, local state updated.', 'warning');
+                });
+            }
+        }
+
+        function rejectVisitor(visitorId) {
+            if (!confirm('Reject this visitor?')) return;
+
+            const visitor = AppState.visitors.find(v => v.id === visitorId);
+            if (!visitor) {
+                showAlert('Visitor not found', 'error');
+                return;
+            }
+
+            const companyId = AppState.currentUser?.companyId;
+
+            // Local update
+            visitor.status = 'rejected';
+            visitor.updatedAt = new Date().toISOString();
+            AppState.save();
+            if (typeof updateDashboard === 'function') {
+                updateDashboard();
+            }
+            renderTodayActivityChart();
+            closeModal('visitorActionModal');
+            showAlert('Visitor rejected', 'info');
+
+            // Firestore sync
+            if (window.fs && window.fs.updateVisitor && visitor.firestoreId && companyId) {
+                window.fs.updateVisitor(companyId, visitor.firestoreId, {
+                    status: 'rejected'
+                }).catch(err => {
+                    console.error('Error updating visitor in Firestore (reject):', err);
+                    showAlert('Cloud sync failed for rejection, local state updated.', 'warning');
+                });
+            }
+        }
+
+
+        function showVisitorQR(visitorId) {
+            const visitor = AppState.visitors.find(v => v.id === visitorId);
+            if (!visitor) return;
+
+            document.getElementById('visitorQRName').textContent = visitor.fullName;
+            document.getElementById('visitorQRCode').innerHTML = '';
+
+            // --- NEW: use only the visitor id string in the QR ---
+            const qrText = String(visitor.id);
+
+            new QRCode(document.getElementById('visitorQRCode'), {
+                text: qrText,
+                width: 300,
+                height: 300,
+                // optional colors — keep existing palette if you want
+                colorDark: '#CB0C9F',
+                colorLight: '#ffffff',
+                correctLevel: QRCode.CorrectLevel.H
+            });
+
+            openModal('visitorQRModal');
+        }
+
+        function downloadVisitorQR() {
+            const canvas = document.querySelector('#visitorQRCode canvas');
+            if (canvas) {
+                const link = document.createElement('a');
+                link.href = canvas.toDataURL('image/png');
+                link.download = `visitor-qr-${Date.now()}.png`;
+                link.click();
+                showAlert('QR Code downloaded!', 'success');
+            }
+        }
+
+        let currentEditVisitorId = null;
+
+        function showEditVisitorModal(visitorId) {
+            const visitor = AppState.visitors.find(v => v.id === visitorId);
+            if (!visitor) return;
+
+            currentEditVisitorId = visitorId;
+            document.getElementById('editFirstName').value = visitor.firstName;
+            document.getElementById('editLastName').value = visitor.lastName;
+            document.getElementById('editEmail').value = visitor.email;
+            document.getElementById('editPhone').value = visitor.phone;
+            document.getElementById('editDate').value = visitor.date;
+            document.getElementById('editTime').value = visitor.time;
+            openModal('editVisitorModal');
+        }
+
+        function submitEditVisitor(e) {
+            if (e && e.preventDefault) e.preventDefault();
+            if (!currentEditVisitorId) return;
+
+            const firstName = document.getElementById('editFirstName').value.trim();
+            const lastName = document.getElementById('editLastName').value.trim();
+            const email = document.getElementById('editEmail').value.trim();
+            const phone = document.getElementById('editPhone').value.trim();
+            const date = document.getElementById('editDate').value.trim();
+            const time = document.getElementById('editTime').value.trim();
+
+            if (!firstName || !lastName || !email || !date || !time) {
+                showAlert('Please fill all required fields', 'error');
+                return;
+            }
+
+            const visitor = AppState.visitors.find(v => v.id === currentEditVisitorId);
+            if (!visitor) {
+                showAlert('Visitor not found', 'error');
+                return;
+            }
+
+            // Local update
+            visitor.firstName = firstName;
+            visitor.lastName = lastName;
+            visitor.fullName = `${firstName} ${lastName}`;
+            visitor.email = email;
+            visitor.phone = phone;
+            visitor.date = date;
+            visitor.time = time;
+            visitor.updatedAt = new Date().toISOString();
+            AppState.save();
+            if (typeof updateDashboard === 'function') {
+                updateDashboard();
+            }
+            renderTodayActivityChart();
+            closeModal('editVisitorModal');
+            showAlert('Visitor updated successfully!', 'success');
+
+            // Firestore sync
+            if (window.fs && window.fs.updateVisitor && visitor.firestoreId) {
+                const companyId = AppState.currentUser?.companyId;
+                if (!companyId) {
+                    console.warn('No companyId while editing visitor; skipping cloud update.');
+                    return;
+                }
+                window.fs.updateVisitor(companyId, visitor.firestoreId, {
+                    firstName,
+                    lastName,
+                    fullName: `${firstName} ${lastName}`,
+                    email,
+                    phone,
+                    date,
+                    time
+                }).catch(err => {
+                    console.error('Error updating visitor in Firestore (edit):', err);
+                    showAlert('Cloud sync failed for update, local state updated.', 'warning');
+                });
+            }
+
+        }
+
+        function deleteVisitor(visitorId) {
+            if (!confirm('Are you sure you want to delete this visitor?')) return;
+
+            const index = AppState.visitors.findIndex(v => v.id === visitorId);
+            if (index === -1) {
+                showAlert('Visitor not found', 'error');
+                return;
+            }
+
+            const visitor = AppState.visitors[index];
+            const companyId = AppState.currentUser?.companyId;
+
+            // Local removal
+            AppState.visitors.splice(index, 1);
+            AppState.save();
+            if (typeof updateDashboard === 'function') {
+                updateDashboard();
+            }
+            renderTodayActivityChart();
+            showAlert(`${visitor.fullName} has been deleted`, 'success');
+
+            // Cloud delete
+            if (window.fs && window.fs.deleteVisitor && visitor.firestoreId && companyId) {
+                window.fs.deleteVisitor(companyId, visitor.firestoreId)
+                    .catch(err => {
+                        console.error('Error deleting visitor in Firestore:', err);
+                        showAlert('Cloud delete failed, local record removed.', 'warning');
+                    });
+            }
+        }
+
+
+        function filterVisitors() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = AppState.visitors.filter(v => v.fullName.toLowerCase().includes(query) || v.email.toLowerCase().includes(query) || v.date?.includes(query));
+
+            const tbody = document.getElementById('recentVisitorsTable');
+            if (!filtered.length) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 40px; color: var(--gray-700);">No results found</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = filtered.slice(-10).reverse().map(v => `
+                <tr>
+                    <td><strong>${escapeHtml(v.fullName)}</strong><br><span style="font-size: 11px; color: var(--gray-700);">${v.dbid}</span></td>
+                    <td>${escapeHtml(v.email)}</td>
+                    <td>${v.date || 'N/A'}</td>
+                    <td><span class="status-badge status-${v.status}">${v.status.toUpperCase()}</span></td>
+                    <td><button class="btn btn-sm btn-secondary" onclick="showVisitorDetails('${v.id}')">View</button></td>
+                </tr>
+            `).join('');
+        }
+
+        // QR SCANNER
+        // === Scan feedback helpers ===
+        function playScanBeep() {
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                const ctx = new AudioCtx();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+
+                osc.type = 'sine';
+                osc.frequency.value = 880; // short beep
+
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+
+                gain.gain.setValueAtTime(1, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.2);
+
+                osc.start();
+                osc.stop(ctx.currentTime + 0.22);
+            } catch (e) {
+                // Some browsers block autoplay audio – ignore
+                console.warn('Beep audio blocked or not supported', e);
+            }
+        }
+
+        function scanFeedbackSuccess(qrData, visitor) {
+            const overlay = document.querySelector('.camera-overlay');
+            const statusEl = document.getElementById('scanStatus');
+
+            // Green success border flash
+            if (overlay) {
+                overlay.classList.add('scan-success');
+                setTimeout(() => overlay.classList.remove('scan-success'), 600);
+            }
+
+            // Decoded text in UI
+            if (statusEl) {
+                const mode = AppState.scanMode || 'checkin';
+                statusEl.className = 'scan-status scan-active';
+
+                if (visitor) {
+                    statusEl.textContent =
+                        mode === 'checkout'
+                            ? `Checked out: ${visitor.fullName}`
+                            : `Checked in: ${visitor.fullName}`;
+                } else {
+                    statusEl.textContent = `Scanned: ${qrData}`;
+                }
+            }
+
+
+            // Vibration
+            if (navigator.vibrate) {
+                navigator.vibrate(200);
+            }
+
+            // Beep
+            playScanBeep();
+        }
+
+        // QR SCANNER
+        async function startCamera() {
+            const statusEl = document.getElementById('scanStatus');
+
+            // Basic support check
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                showAlert('Camera not supported in this browser / context', 'error');
+                if (statusEl) {
+                    statusEl.className = 'scan-status';
+                    statusEl.textContent = 'Camera not supported';
+                }
+                AppState.scanningActive = false;
+                return;
+            }
+
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: 'environment' }
+                });
+
+                const video = document.getElementById('cameraStream');
+                video.srcObject = stream;
+
+                AppState.scanningActive = true;
+
+                    if (statusEl) {
+                        const label = AppState.scanMode === 'checkout' ? 'Check-out' : 'Check-in';
+                        statusEl.className = 'scan-status scan-active';
+                        statusEl.textContent = `Scanning… (${label})`;
+                    }
+
+
+                scanQRCode();
+            } catch (err) {
+                console.error('getUserMedia error:', err);
+                showAlert('Camera access denied or blocked', 'error');
+                if (statusEl) {
+                    statusEl.className = 'scan-status';
+                    statusEl.textContent = 'Camera denied / blocked';
+                }
+                AppState.scanningActive = false;
+            }
+        }
+
+        function stopCameraScanner() {
+            const video = document.getElementById('cameraStream');
+            if (video && video.srcObject) {
+                video.srcObject.getTracks().forEach(t => t.stop());
+                video.srcObject = null;
+            }
+            AppState.scanningActive = false;
+            showManualEntry();
+        }
+
+            function startCheckInScan() {
+            AppState.scanMode = 'checkin';
+            showCameraScanner();
+        }
+
+        function startCheckOutScan() {
+            AppState.scanMode = 'checkout';
+            showCameraScanner();
+        }
+
+        function startAutoScan() {
+            AppState.scanMode = 'auto';
+            showCameraScanner();
+        }
+
+
+        function showCameraScanner() {
+            // Show camera UI
+            document.getElementById('cameraMode').style.display = 'block';
+            document.getElementById('manualMode').style.display = 'none';
+
+        // Reset status text
+        const statusEl = document.getElementById('scanStatus');
+        if (statusEl) {
+            let label = 'Scan';
+            if (AppState.scanMode === 'checkin') label = 'Check-in';
+            else if (AppState.scanMode === 'checkout') label = 'Check-out';
+
+            statusEl.textContent = `Starting camera… (${label})`;
+        }
+
+        startCamera();
+    }
+
+
+    function showManualEntry() {
+        document.getElementById('cameraMode').style.display = 'none';
+        document.getElementById('manualMode').style.display = 'block';
+    }
+
+    function scanQRCode() {
+        if (!AppState.scanningActive) return;
+
+        const video = document.getElementById('cameraStream');
+        const canvas = document.getElementById('scanCanvas');
+        const ctx = canvas.getContext('2d', { willReadFrequently: true }) || canvas.getContext('2d');
+        const statusEl = document.getElementById('scanStatus');
+
+        // If jsQR didn't load, stop gracefully
+        if (typeof jsQR === 'undefined') {
+            console.warn('jsQR library is not available');
+            if (statusEl) {
+                statusEl.className = 'scan-status';
+                statusEl.textContent = 'QR scanner library not loaded. Check internet / CDN.';
+            }
+            showAlert('QR scanner library (jsQR) could not be loaded. Please check your internet connection or any blocker.', 'error');
+            AppState.scanningActive = false;
+            return;
+        }
+
+        if (video.readyState === video.HAVE_ENOUGH_DATA) {
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            try {
+                const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                const code = jsQR(imgData.data, imgData.width, imgData.height);
+                if (code) {
+                    processQRData(code.data);
+                    return; // stop loop, process success
+                }
+            } catch (e) {
+                console.warn('scan error', e);
+            }
+        }
+
+        requestAnimationFrame(scanQRCode);
+    }
+
+
+    function processQRData(qrData) {
+        const now = Date.now();
+
+        // ⏱ Scan cooldown (2 seconds)
+        if (now - (AppState.lastScanAt || 0) < 2000) {
+            return; // ignore rapid duplicate scans
+        }
+
+        AppState.lastScanAt = now;
+
+        let visitorId;
+        try {
+            visitorId = JSON.parse(qrData).id;
+        } catch {
+            visitorId = qrData;
+        }
+
+        const statusEl = document.getElementById('scanStatus');
+
+        // 🔍 Find visitor by internal id OR dbid (VIS-xxxx)
+        const visitor = AppState.visitors.find(
+            v => v.id === visitorId || v.dbid === visitorId
+        );
+
+        if (!visitor) {
+            showAlert('Invalid QR code. Visitor not found.', 'error');
+            if (statusEl) {
+                statusEl.className = 'scan-status';
+                statusEl.textContent = 'Invalid / unknown QR';
+            }
+            return;
+        }
+
+        if (visitor.status === 'rejected') {
+            showAlert('Access denied. This visitor is blocked.', 'error');
+            if (statusEl) {
+                statusEl.className = 'scan-status';
+                statusEl.textContent = 'Access denied';
+            }
+            return;
+        }
+
+        const mode = AppState.scanMode || 'checkin';
+        const companyId = AppState.currentUser?.companyId;
+        const nowIso = new Date().toISOString();
+
+        /* ===============================
+           🔁 AUTO MODE (SMART SCAN)
+        ================================ */
+        if (mode === 'auto') {
+
+            // ➜ AUTO CHECK-IN
+            if (!visitor.checkedInAt) {
+                visitor.status = 'checked-in';
+                visitor.checkedInAt = nowIso;
+                visitor.updatedAt = nowIso;
+                AppState.save();
+
+                if (window.fs && visitor.firestoreId && companyId) {
+                    window.fs.updateVisitor(companyId, visitor.firestoreId, {
+                        status: 'checked-in',
+                        checkedInAt: nowIso,
+                        updatedAt: nowIso
+                    });
+                }
+
+                scanFeedbackSuccess(qrData, visitor);
+                showAlert(`Checked in: ${visitor.fullName}`, 'success');
+
+                // 🟢 KIOSK SCAN — auto return after success
+                if (window.__KIOSK_SCAN__) {
+                    resetToKioskHome();
+                    return;
+                }
+            }
+
+            // ➜ AUTO CHECK-OUT
+            else if (visitor.checkedInAt && !visitor.checkedOutAt) {
+                visitor.status = 'checked-out';
+                visitor.checkedOutAt = nowIso;
+                visitor.updatedAt = nowIso;
+                AppState.save();
+
+                if (window.fs && visitor.firestoreId && companyId) {
+                    window.fs.updateVisitor(companyId, visitor.firestoreId, {
+                        status: 'checked-out',
+                        checkedOutAt: nowIso,
+                        updatedAt: nowIso
+                    });
+                }
+
+                scanFeedbackSuccess(qrData, visitor);
+                showAlert(`Checked out: ${visitor.fullName}`, 'success');
+
+                // 🟢 KIOSK SCAN — auto return after success
+                if (window.__KIOSK_SCAN__) {
+                    resetToKioskHome();
+                    return;
+                }
+            }
+
+            // ➜ ALREADY CHECKED OUT
+            else {
+                showAlert('This visitor has already checked out.', 'warning');
+                if (statusEl) {
+                    statusEl.className = 'scan-status';
+                    statusEl.textContent = 'Already checked out';
+                }
+
+                // 🔴 KIOSK SCAN — auto return after warning
+                if (window.__KIOSK_SCAN__) {
+                    resetToKioskHome(2000);
+                    return;
+                }
+                return;
+            }
+        }
+
+        /* ===============================
+           🔹 MANUAL CHECK-IN MODE
+        ================================ */
+        else if (mode === 'checkin') {
+
+            if (visitor.status === 'checked-in') {
+                showAlert('Visitor already checked in', 'warning');
+                if (statusEl) {
+                    statusEl.className = 'scan-status';
+                    statusEl.textContent = 'Already checked in';
+                }
+
+                if (window.__KIOSK_SCAN__) {
+                    resetToKioskHome(2000);
+                    return;
+                }
+                return;
+            }
+
+            visitor.status = 'checked-in';
+            visitor.checkedInAt = nowIso;
+            visitor.updatedAt = nowIso;
+            AppState.save();
+
+            if (window.fs && visitor.firestoreId && companyId) {
+                window.fs.updateVisitor(companyId, visitor.firestoreId, {
+                    status: 'checked-in',
+                    checkedInAt: nowIso,
+                    updatedAt: nowIso
+                });
+            }
+
+            scanFeedbackSuccess(qrData, visitor);
+            showAlert(`Welcome ${visitor.fullName}!`, 'success');
+
+            if (window.__KIOSK_SCAN__) {
+                resetToKioskHome();
+                return;
+            }
+        }
+
+        /* ===============================
+           🔹 MANUAL CHECK-OUT MODE
+        ================================ */
+        else {
+            if (visitor.status !== 'checked-in') {
+                showAlert('Visitor is not currently checked in', 'warning');
+                if (statusEl) {
+                    statusEl.className = 'scan-status';
+                    statusEl.textContent = 'Not checked in';
+                }
+
+                if (window.__KIOSK_SCAN__) {
+                    resetToKioskHome(2000);
+                    return;
+                }
+                return;
+            }
+
+            visitor.status = 'checked-out';
+            visitor.checkedOutAt = nowIso;
+            visitor.updatedAt = nowIso;
+            AppState.save();
+
+            if (window.fs && visitor.firestoreId && companyId) {
+                window.fs.updateVisitor(companyId, visitor.firestoreId, {
+                    status: 'checked-out',
+                    checkedOutAt: nowIso,
+                    updatedAt: nowIso
+                });
+            }
+
+            scanFeedbackSuccess(qrData, visitor);
+            showAlert(`Checked out ${visitor.fullName}`, 'success');
+
+            if (window.__KIOSK_SCAN__) {
+                resetToKioskHome();
+                return;
+            }
+        }
+
+        // 🔚 Finalize scan (DASHBOARD ONLY)
+        stopCameraScanner();
+        if (typeof updateDashboard === 'function') {
+            updateDashboard();
+        }
+        renderTodayActivityChart();
+    }
+
+
+    // EMPLOYEE MANAGEMENT
+        function showAddEmployeeModal() {
+            openModal('addEmployeeModal');
+        }
+
+        // EMPLOYEE MANAGEMENT — improved addEmployee handler (Kiosk-safe)
+        async function addEmployee(event) {
+            if (event && typeof event.preventDefault === 'function') {
+                event.preventDefault();
+            }
+
+            const nameInput  = document.getElementById('employeeName');
+            const emailInput = document.getElementById('employeeEmail');
+            const roleInput  = document.getElementById('employeeRole');
+            const addBtn     = document.getElementById('addEmployeeBtn');
+
+            if (!nameInput || !emailInput || !roleInput) {
+                showAlert('Employee form elements are missing on the page.', 'error');
+                return;
+            }
+
+            const name  = (nameInput.value || '').trim();
+            const emailRaw = (emailInput.value || '').trim();
+            const role  = (roleInput.value || '').trim();
+
+            if (!name || !emailRaw || !role) {
+                showAlert('Please fill all employee fields', 'error');
+                return;
+            }
+
+            const email = emailRaw.toLowerCase();
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showAlert('Please enter a valid email address', 'error');
+                return;
+            }
+
+            const companyId   = AppState.currentUser?.companyId;
+            const companyName = AppState.currentUser?.companyName || AppState.currentUser?.company;
+
+            if (!companyId) {
+                showAlert('Missing companyId. Please log in again.', 'error');
+                return;
+            }
+
+            if (addBtn) {
+                addBtn.disabled = true;
+                addBtn.textContent = 'Adding...';
+            }
+
+            const resetToken = Math.random().toString(36).substring(2) + Date.now().toString(36);
+            const nowIso = new Date().toISOString();
+
+            const isKiosk = role === 'Kiosk';
+
+            const employee = {
+                dbid: Database.generateId('users'),
+                password: null,
+                role,
+                fullName: name,
+
+                // 🔐 All new users (including Kiosk) must set password first
+                status: 'pending',
+
+                email,
+                companyId,
+                companyName: companyName || '',
+
+                // 🔑 Always generate reset token so email works
+                resetToken,
+                resetTokenCreatedAt: nowIso,
+
+                createdAt: nowIso,
+                updatedAt: nowIso
+            };
+
+
+            try {
+                if (window.fs && window.fs.addEmployee) {
+                    await window.fs.addEmployee(companyId, employee);
+                }
+
+                AppState.users = AppState.users || {};
+                AppState.users[email] = employee;
+                try { AppState.save(); } catch (e) {}
+
+                // 📧 Send welcome email ONLY for non-kiosk users
+                if (window.sendEmployeeWelcomeEmailFn) {
+                    try {
+                        const setupLink =
+                            `${window.location.origin}` +
+                            `?mode=setup-password` +
+                            `&email=${encodeURIComponent(email)}` +
+                            `&token=${encodeURIComponent(resetToken)}`;
+
+                        await window.sendEmployeeWelcomeEmailFn({
+                            email,
+                            fullName: name,
+                            role,
+                            companyName: companyName || 'Visitor Management',
+                            setupLink
+                        });
+
+                        showAlert(
+                            role === 'Kiosk'
+                                ? 'Kiosk account created. Set password email sent.'
+                                : `Employee ${name} added & welcome email sent!`,
+                            'success'
+                        );
+                    } catch (err) {
+                        console.error('Email error', err);
+                        showAlert(`Employee ${name} added, but email could not be sent.`, 'warning');
+                    }
+                } else if (isKiosk) {
+                    showAlert(`Kiosk user ${name} added successfully.`, 'success');
+                } else {
+                    showAlert(`Employee ${name} added (email service not configured).`, 'success');
+                }
+
+            } catch (err) {
+                console.error('Error saving employee', err);
+                showAlert('Could not save employee to cloud. Saved locally if possible.', 'error');
+
+                AppState.users[email] = AppState.users[email] || employee;
+                try { AppState.save(); } catch (e) {}
+            } finally {
+                closeModal('addEmployeeModal');
+
+                nameInput.value = '';
+                emailInput.value = '';
+                roleInput.value = '';
+
+                if (addBtn) {
+                    addBtn.disabled = false;
+                    addBtn.textContent = 'Add Employee';
+                }
+
+                if (typeof updateDashboard === 'function') {
+                    updateDashboard();
+                }
+                renderTodayActivityChart();
+            }
+        }
+
+        // REMOVE EMPLOYEE (unchanged)
+        function removeEmployee(email) {
+            if (!confirm(`Remove ${email}?`)) return;
+
+            if (email === AppState.currentUser.email) {
+                showAlert("You cannot delete your own account.", "error");
+                return;
+            }
+
+            const companyId = AppState.currentUser?.companyId;
+            if (!companyId) {
+                showAlert("Missing companyId. Please log in again.", "error");
+                return;
+            }
+
+            if (window.fs && window.fs.deleteEmployee) {
+                window.fs.deleteEmployee(companyId, email)
+                    .then(() => {
+                        showAlert('Employee removed successfully', 'success');
+                        delete AppState.users[email];
+                        AppState.save();
+                        if (typeof updateDashboard === 'function') {
+                            updateDashboard();
+                        }
+                        renderTodayActivityChart();
+                    })
+                    .catch(err => {
+                        console.error('Error removing employee', err);
+                        showAlert('Could not remove employee from cloud.', 'error');
+                    });
+            } else {
+                delete AppState.users[email];
+                AppState.save();
+                showAlert('Employee removed locally', 'warning');
+                if (typeof updateDashboard === 'function') {
+                    updateDashboard();
+                }
+                renderTodayActivityChart();
+            }
+        }
+
+
+        // SECURITY
+        function addToBlockList() {
+            const email = document.getElementById('blockEmail').value.trim();
+
+            if (!email.includes('@')) {
+                showAlert('Invalid email', 'error');
+                return;
+            }
+
+            if (AppState.blockList.some(b => b.email === email)) {
+                showAlert('Email already blocked', 'warning');
+                return;
+            }
+
+            AppState.blockList.push({
+                dbid: Database.generateId('blockList'),
+                email,
+                blockedAt: new Date().toISOString(),
+                blockedBy: AppState.currentUser.fullName,
+                createdAt: new Date().toISOString()
+            });
+
+            AppState.save();
+            showAlert(`${email} blocked`, 'success');
+            document.getElementById('blockEmail').value = '';
+            updateBlockListTable();
+        }
+
+        function removeFromBlockList(index) {
+            AppState.blockList.splice(index, 1);
+            AppState.save();
+            showAlert('Removed from block list', 'success');
+            updateBlockListTable();
+        }
+
+        // SETTINGS
+        function saveSettings() {
+            AppState.settings.welcomeTitle = document.getElementById('welcomeTitle').value;
+            AppState.settings.welcomeMessage = document.getElementById('welcomeMessage').value;
+            AppState.save();
+            showAlert('Settings saved!', 'success');
+        }
+
+        // SIMPLE PAGE SWITCHER (login / forgot / set password / dashboard)
+        function switchPage(pageId) {
+            if (AppState.currentUser?.role === 'Kiosk') {
+                console.warn('Page switching blocked for Kiosk role');
+                return;
+            }
+            // Hide all .page sections
+            const pages = document.querySelectorAll('.page');
+            pages.forEach((p) => p.classList.remove('active'));
+
+            // Show the requested one
+            const target = document.getElementById(pageId);
+            if (target) {
+                target.classList.add('active');
+            } else {
+                console.warn('switchPage: page not found ->', pageId);
+            }
+        }
+
+        // INITIALIZATION
+
+            // 1️⃣ If opened from email link (?mode=setup-password&email=...&token=...)
+            if (typeof maybeShowSetPasswordPageFromUrl === 'function') {
+                maybeShowSetPasswordPageFromUrl();
+            }
+
+            // 2️⃣ If user is already logged in, show dashboard
+            if (AppState.currentUser) {
+                const loginPage = document.getElementById('loginPage');
+                const dashboardPage = document.getElementById('dashboardPage');
+
+                if (loginPage) loginPage.classList.remove('active');
+                if (dashboardPage) dashboardPage.classList.add('active');
+
+                initializeDashboard();
+
+                if (window.startCompanyListeners && AppState.currentUser.companyId) {
+                    window.startCompanyListeners(AppState.currentUser.companyId);
+                }
+            }
+
+
+        // Show manual mode by default
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('manualMode').style.display = 'block';
+        });
+          // Make sure sidebar can be closed from anywhere
+          function closeMobileSidebarIfOpen() {
+            const sidebar = document.getElementById('sidebar');
+            if (sidebar && sidebar.classList.contains('mobile-open')) {
+              sidebar.classList.remove('mobile-open');
+            }
+          }
+
+          // Auto-close sidebar when any nav item is clicked
+          window.addEventListener('DOMContentLoaded', function () {
+            const sidebar = document.getElementById('sidebar');
+            if (!sidebar) return;
+
+            sidebar.addEventListener('click', function (e) {
+              const item = e.target.closest('.nav-item');
+              if (!item) return;
+
+              // Let existing onclick="navigateTo(...)" run,
+              // then close the mobile sidebar
+              closeMobileSidebarIfOpen();
+            });
+          });
+
+          function showKioskHome() {
+
+            // 1️⃣ Hide ALL pages
+            document.querySelectorAll('.page').forEach(p =>
+                p.classList.remove('active')
+            );
+
+            // 2️⃣ Ensure login page is hidden
+            const loginPage = document.getElementById('loginPage');
+            if (loginPage) {
+                loginPage.classList.remove('active');
+            }
+
+            // 3️⃣ FORCE app container to be visible
+            const appContainer = document.querySelector('.app-container');
+            if (appContainer) {
+                appContainer.style.display = 'flex';
+            }
+
+            // 4️⃣ Activate kiosk page
+            const kioskPage = document.getElementById('kioskHomePage');
+            if (!kioskPage) {
+                console.error('Kiosk page not found');
+                return;
+            }
+
+            kioskPage.classList.add('active');
+
+            // 5️⃣ Generate QR (safe)
+            if (typeof generateKioskQR === 'function') {
+                generateKioskQR();
+            }
+        }
+    
+        // ===============================
+        // PUBLIC INVITE BACK-NAV BLOCK
+        // ===============================
+        window.addEventListener('popstate', () => {
+            if (window.__PUBLIC_INVITE__) {
+                history.pushState(null, '', location.href);
+            }
+        });
+
+    </script>
+
+    <script type="module">
+    /* -------------------------
+       FIREBASE MULTI-TENANT SETUP
+    ----------------------------*/
+
+    // Firebase imports
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+    import {
+      getFirestore,
+      collection,
+      doc,
+      addDoc,
+      setDoc,
+      updateDoc,
+      deleteDoc,
+      onSnapshot,
+      serverTimestamp,
+      getDoc,
+      getDocs
+    } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+
+
+    import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-functions.js";
+
+    // Firebase config (unchanged)
+    const firebaseConfig = {
+      apiKey: "AIzaSyBZkSMkagVKblUfiwt8Frv2iJVmqIVF3So",
+      authDomain: "roy-org.firebaseapp.com",
+      projectId: "roy-org",
+      storageBucket: "roy-org.firebasestorage.app",
+      messagingSenderId: "691614679770",
+      appId: "1:691614679770:web:0b37b9206f17f25f6b5be3",
+      measurementId: "G-X3EZR9SNMN"
+    };
+
+    // INIT
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const functions = getFunctions(app);
+
+    window.sendInviteEmailFn = httpsCallable(functions, "sendInviteEmail");
+    window.sendEmployeeWelcomeEmailFn = httpsCallable(functions, "sendEmployeeWelcomeEmail");
+
+    // 🔐 Callable for completing password setup (token + new password)
+    const completePasswordSetupFn = httpsCallable(functions, "completePasswordSetup");
+    window.completePasswordSetupFn = completePasswordSetupFn;
+    const requestPasswordResetFn = httpsCallable(functions, "requestPasswordReset");
+    window.requestPasswordResetFn = requestPasswordResetFn;
+
+
+
+    /* ----------------------------------------------------
+       MULTI-TENANT DATABASE HELPERS
+       (ALL DATA UNDER companies/{companyId}/...)
+    ------------------------------------------------------*/
+
+    window.fs = {
+
+      /* 🔹 CREATE COMPANY + FIRST ADMIN */
+      async createCompanyWithAdmin(company, adminUser) {
+        // create company
+        const compRef = await addDoc(collection(db, "companies"), {
+          ...company,
+          createdAt: serverTimestamp(),
+          updatedAt: serverTimestamp()
+        });
+
+        const companyId = compRef.id;
+
+        // create admin employee: companies/{companyId}/employees/{adminUser.email}
+        await setDoc(
+          doc(db, "companies", companyId, "employees", adminUser.email.toLowerCase()),
+          {
+            ...adminUser,
+            companyId,
+            companyName: company.name,
+            createdAt: serverTimestamp(),
+            updatedAt: serverTimestamp()
+          }
+        );
+
+        return { companyId };
+      },
+
+      /* 🔹 VISITORS CRUD */
+      addVisitor(companyId, visitor) {
+        return addDoc(collection(db, "companies", companyId, "visitors"), {
+          ...visitor,
+          companyId,
+          createdAt: serverTimestamp(),
+          updatedAt: serverTimestamp()
+        });
+      },
+
+      updateVisitor(companyId, firestoreId, data) {
+        return updateDoc(
+          doc(db, "companies", companyId, "visitors", firestoreId),
+          {
+            ...data,
+            updatedAt: serverTimestamp()
+          }
+        );
+      },
+
+      deleteVisitor(companyId, firestoreId) {
+        return deleteDoc(doc(db, "companies", companyId, "visitors", firestoreId));
+      },
+
+      /* 🔹 EMPLOYEES CRUD — NEW addEmployee helper */
+      addEmployee(companyId, employee) {
+        const email = employee.email.toLowerCase();
+
+        return setDoc(
+          doc(db, "companies", companyId, "employees", email),
+          {
+            ...employee,
+            email,
+            companyId,
+            createdAt: serverTimestamp(),
+            updatedAt: serverTimestamp()
+          }
+        );
+      },
+
+      deleteEmployee(companyId, email) {
+        return deleteDoc(
+          doc(db, "companies", companyId, "employees", email.toLowerCase())
+        );
+      }
+    };
+
+    window.fs._firestoreReady = true;
+
+    window.fs.listenVisitors = (companyId, cb) => {
+        return onSnapshot(
+            collection(db, `companies/${companyId}/visitors`),
+            snap => {
+                const list = [];
+                snap.forEach(doc => list.push({
+                    firestoreId: doc.id,
+                    ...doc.data()
+                }));
+                cb(list);
+            }
+        );
+    };
+
+    window.fs.listenEmployees = (companyId, cb) => {
+        return onSnapshot(
+            collection(db, `companies/${companyId}/employees`),
+            snap => {
+                const users = {};
+                snap.forEach(doc => {
+                    const data = doc.data();
+                    users[data.email] = data;
+                });
+                cb(users);
+            }
+        );
+    };
+
+    window.fs.listenBlockList = (companyId, cb) => {
+        return onSnapshot(
+            collection(db, `companies/${companyId}/blocklist`),
+            snap => {
+                const list = [];
+                snap.forEach(doc => list.push({
+                    firestoreId: doc.id,
+                    ...doc.data()
+                }));
+                cb(list);
+            }
+        );
+    };
+
+    /* ----------------------------------------------------
+       REAL-TIME LISTENERS (PER COMPANY)
+    ------------------------------------------------------*/
+
+    window.__UNSUBS__ = [];
+
+    window.startCompanyListeners = (companyId) => {
+      if (!companyId) return;
+
+      // 🔥 Cleanup old listeners
+      if (Array.isArray(window.__UNSUBS__)) {
+        window.__UNSUBS__.forEach(fn => fn && fn());
+      }
+      window.__UNSUBS__ = [];
+
+      /* 🔥 Visitors Listener */
+      const unsubVisitors = onSnapshot(
+        collection(db, `companies/${companyId}/visitors`),
+        (snap) => {
+          const list = [];
+          snap.forEach((doc) => {
+            list.push({
+              firestoreId: doc.id,
+              ...doc.data()
+            });
+          });
+
+          window.AppState.visitors = list;
+          window.AppState.save();
+          if (window.updateDashboard) window.updateDashboard();
+          if (window.updateAnalytics) window.updateAnalytics();
+        }
+      );
+
+      /* 🔥 Employees Listener */
+      const unsubEmployees = onSnapshot(
+        collection(db, `companies/${companyId}/employees`),
+        (snap) => {
+          const merged = {};
+          snap.forEach((doc) => {
+            const data = doc.data();
+            merged[data.email] = data;
+          });
+
+          window.AppState.users = merged;
+          window.AppState.save();
+          if (window.updateDashboard) window.updateDashboard();
+        }
+      );
+
+      /* 🔥 Block List Listener */
+      const unsubBlocklist = onSnapshot(
+        collection(db, `companies/${companyId}/blocklist`),
+        (snap) => {
+          const list = [];
+          snap.forEach((doc) => {
+            list.push({
+              firestoreId: doc.id,
+              ...doc.data()
+            });
+          });
+
+          window.AppState.blockList = list;
+          window.AppState.save();
+        }
+      );
+
+      window.__UNSUBS__.push(
+        unsubVisitors,
+        unsubEmployees,
+        unsubBlocklist
+      );
+    };
+
+      // 🔍 Helper: find employee/admin by email from Firestore
+      window.findEmployeeByEmail = async (email) => {
+        try {
+          const companiesRef = collection(db, "companies");
+          const companiesSnap = await getDocs(companiesRef);
+
+          for (const compDoc of companiesSnap.docs) {
+            const empRef = doc(db, "companies", compDoc.id, "employees", email);
+            const empSnap = await getDoc(empRef);
+
+            if (empSnap.exists()) {
+              const data = empSnap.data();
+              // ensure companyId is present
+              return {
+                ...data,
+                companyId: data.companyId || compDoc.id
+              };
+            }
+          }
+
+          return null; // not found
+        } catch (err) {
+          console.error("Error in findEmployeeByEmail:", err);
+          throw err;
+        }
+      };
+        // Simple page switcher for login / forgot / signup / dashboard
+      function switchPage(pageId) {
+        // Hide all sections with class="page"
+        const pages = document.querySelectorAll('.page');
+        pages.forEach(p => p.classList.remove('active'));
+
+        // Show the requested one
+        const target = document.getElementById(pageId);
+        if (target) {
+          target.classList.add('active');
+        } else {
+          console.warn('switchPage: page not found ->', pageId);
+        }
+      }
+
+    </script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        lucide.createIcons();
+      });
+    </script>
+
+    <script>
+/* =====================================================
+   GLOBAL MODAL UX HANDLERS (FINAL)
+   - ESC closes modal (non-kiosk)
+   - Click outside closes modal (non-kiosk)
+   - ENTER submits active modal form (once)
+===================================================== */
+
+(function () {
+
+    let enterLocked = false;
+
+    function isModalLocked(modal) {
+        // Do NOT close in kiosk or public invite
+        if (window.__KIOSK_MODE__ || window.__PUBLIC_INVITE__) {
+            return true;
+        }
+
+        // Explicit lock flag (future-safe)
+        if (modal.dataset.locked === 'true') {
+            return true;
+        }
+
+        return false;
+    }
+
+    function getActiveModal() {
+        return document.querySelector('.modal.active');
+    }
+
+    function closeActiveModal() {
+        const modal = getActiveModal();
+        if (!modal) return;
+
+        if (isModalLocked(modal)) return;
+
+        const closeBtn = modal.querySelector('.modal-close');
+        if (closeBtn) {
+            closeBtn.click();
+        } else {
+            modal.classList.remove('active');
+        }
+    }
+
+    /* ---------------------------
+       ESC → CLOSE MODAL
+    ----------------------------*/
+    document.addEventListener('keydown', function (e) {
+        const modal = getActiveModal();
+        if (!modal) return;
+
+        if (e.key === 'Escape') {
+            e.preventDefault();
+            closeActiveModal();
+        }
+
+        /* ---------------------------
+           ENTER → SUBMIT FORM
+        ----------------------------*/
+        if (e.key === 'Enter') {
+
+            // Prevent repeat submit
+            if (enterLocked) return;
+
+            // Allow newline in textarea
+            if (e.target && e.target.tagName === 'TEXTAREA') return;
+
+            // Ignore buttons & selects
+            if (
+                e.target &&
+                ['BUTTON', 'SELECT'].includes(e.target.tagName)
+            ) return;
+
+            const form = modal.querySelector('form');
+            if (!form) return;
+
+            e.preventDefault();
+            enterLocked = true;
+
+            const submitBtn =
+                form.querySelector('[type="submit"]') ||
+                modal.querySelector('.btn-primary');
+
+            if (submitBtn && !submitBtn.disabled) {
+                submitBtn.click();
+            }
+
+            // Release lock shortly after
+            setTimeout(() => {
+                enterLocked = false;
+            }, 400);
+        }
+    });
+
+    /* --------------------------------
+       CLICK OUTSIDE → CLOSE MODAL
+    ---------------------------------*/
+    document.addEventListener('click', function (e) {
+        const modal = getActiveModal();
+        if (!modal) return;
+
+        if (isModalLocked(modal)) return;
+
+        // Only backdrop click
+        if (e.target === modal) {
+            closeActiveModal();
+        }
+    });
+
+})();
+</script>
+
+<script>
+function openVisitorTypes() {
+  const section = document.getElementById('settingsSection');
+  const container = document.getElementById('visitorTypesContainer');
+
+  if (!section || !container) return;
+
+  // Ensure Settings page is visible
+  document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
+  section.style.display = 'block';
+
+  // Render only the list (layout already exists in HTML)
+  renderVisitorTypes();
+}
+
+</script>
+
+<script>
+function toggleSettingsMenu() {
+  const menu = document.getElementById('settingsSubmenu');
+  const arrow = document.getElementById('settingsArrow');
+
+  if (!menu || !arrow) return;
+
+  const isOpen = menu.style.display === 'block';
+
+  menu.style.display = isOpen ? 'none' : 'block';
+  arrow.textContent = isOpen ? '▶' : '▾';
+}
+
+</script>
+
+<script>
+/* ===============================
+   KIOSK FEEDBACK HELPERS
+=============================== */
+
+// ✅ Beep for success
+function playSuccessBeep() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+
+    osc.type = 'sine';
+    osc.frequency.value = 880; // pleasant beep
+    gain.gain.value = 0.1;
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc.start();
+    setTimeout(() => osc.stop(), 150);
+  } catch (e) {}
+}
+
+// 🚨 Siren / error tone
+function playErrorSiren() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+
+    osc.type = 'square';
+    osc.frequency.value = 220;
+    gain.gain.value = 0.15;
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc.start();
+    setTimeout(() => osc.stop(), 400);
+  } catch (e) {}
+}
+
+// 📳 Vibration (mobile / tablet)
+function vibrateDevice(ms = 100) {
+  if (navigator.vibrate) {
+    navigator.vibrate(ms);
+  }
+}
+</script>
+
+<script>
+/* ===============================
+   KIOSK FEEDBACK HELPERS
+=============================== */
+
+// ✅ Beep for success
+function playSuccessBeep() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+
+    osc.type = 'sine';
+    osc.frequency.value = 880; // pleasant beep
+    gain.gain.value = 0.1;
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc.start();
+    setTimeout(() => osc.stop(), 150);
+  } catch (e) {}
+}
+
+// 🚨 Siren / error tone
+function playErrorSiren() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+
+    osc.type = 'square';
+    osc.frequency.value = 220;
+    gain.gain.value = 0.15;
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc.start();
+    setTimeout(() => osc.stop(), 400);
+  } catch (e) {}
+}
+
+// 📳 Vibration (mobile / tablet)
+function vibrateDevice(ms = 100) {
+  if (navigator.vibrate) {
+    navigator.vibrate(ms);
+  }
+}
+</script>
+
+</body>
+</html>
